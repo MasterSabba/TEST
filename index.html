@@ -776,18 +776,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.handleHubLogout = () => signOut(auth);
 
-   // Sincronizzazione punti e calcolo automatico degli Achievement
-// Sincronizzazione punti, calcolo automatico degli Achievement e calcolo Valuta Shop
+
 async function syncLocalPointsToProfile(uid) {
     let updated = false;
     const userRef = doc(db, "users", uid);
     const userDoc = await getDoc(userRef);
     
     let currentAchievements = [];
-    if (userDoc.exists() && userDoc.data().achievements) {
-        currentAchievements = userDoc.data().achievements;
+    let currentCoins = 0;
+    let oldTotalScore = 0;
+
+    if (userDoc.exists()) {
+        const data = userDoc.data();
+        currentAchievements = data.achievements || [];
+        currentCoins = data.coins !== undefined ? data.coins : 0;
+        oldTotalScore = data.totalScore || 0;
     }
 
+    // Sincronizza i punteggi dei singoli giochi
     Object.keys(window.globalRivals).forEach(g => {
         const localScore = parseInt(localStorage.getItem(`points_${g.toLowerCase()}`)) || 0;
         if (localScore > (window.hubCachedScores[g] || 0)) {
@@ -796,20 +802,28 @@ async function syncLocalPointsToProfile(uid) {
         }
     });
 
-    let totalScore = 0;
-    Object.values(window.hubCachedScores).forEach(s => totalScore += s);
+    // Ricalcola il punteggio massimo storico teorico
+    let newTotalScore = 0;
+    Object.values(window.hubCachedScores).forEach(s => newTotalScore += s);
+
+    // Se il record storico è aumentato, aggiungi la differenza al portafoglio spendibile
+    if (newTotalScore > oldTotalScore) {
+        const profit = newTotalScore - oldTotalScore;
+        currentCoins += profit;
+    }
 
     // --- ACHIEVEMENTS ---
     let achievementsUpdated = false;
-    if (totalScore >= 50 && !currentAchievements.includes("Primo Passo")) { currentAchievements.push("Primo Passo"); achievementsUpdated = true; }
-    if (totalScore >= 200 && !currentAchievements.includes("Gran Maestro")) { currentAchievements.push("Gran Maestro"); achievementsUpdated = true; }
+    if (newTotalScore >= 50 && !currentAchievements.includes("Primo Passo")) { currentAchievements.push("Primo Passo"); achievementsUpdated = true; }
+    if (newTotalScore >= 200 && !currentAchievements.includes("Gran Maestro")) { currentAchievements.push("Gran Maestro"); achievementsUpdated = true; }
 
-    // Salva su Firestore (incluso il totalScore aggiornato come valuta disponibile)
-    if ((updated || achievementsUpdated) && uid) {
+    // Salva tutto su Firestore
+    if ((updated || achievementsUpdated || newTotalScore > oldTotalScore) && uid) {
         try { 
             await setDoc(userRef, { 
                 scores: window.hubCachedScores,
-                totalScore: totalScore, // <--- Valuta per lo shop
+                totalScore: newTotalScore, // Record fisso per le classifiche
+                coins: currentCoins,       // Punti spendibili nello shop
                 achievements: currentAchievements 
             }, { merge: true }); 
         } catch(e) { console.error("Errore salvataggio dati:", e); }
@@ -910,12 +924,88 @@ async function syncLocalPointsToProfile(uid) {
         } else { alert("Su iOS clicca su 'Condividi' -> 'Aggiungi alla schermata Home'."); }
     };
 
-    // Elenco degli Avatar disponibili nello Shop (ID, Emoji, Costo in punti totali)
 window.avatarShopItems = [
     { id: "cyber_ghost", icon: "👻", cost: 0, name: "CyberGhost (Default)" },
     { id: "neon_ninja", icon: "🥷", cost: 30, name: "Neon Ninja" },
     { id: "hacker_cat", icon: "🐱", cost: 75, name: "Hacker Cat" },
     { id: "matrix_god", icon: "👑", cost: 150, name: "Matrix God" }
+];
+
+window.buyOrEquipAvatar = async function(avatarId) {
+    if (!auth.currentUser) { alert("Accedi per sbloccare gli avatar."); return; }
+    
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    const userDoc = await getDoc(userRef);
+    if (!userDoc.exists()) return;
+
+    const data = userDoc.data();
+    let currentCoins = data.coins !== undefined ? data.coins : 0;
+    const unlockedAvatars = data.unlockedAvatars || ["cyber_ghost"];
+    const selectedItem = window.avatarShopItems.find(item => item.id === avatarId);
+
+    if (!selectedItem) return;
+
+    // Se è già sbloccato, cambialo gratis
+    if (unlockedAvatars.includes(avatarId)) {
+        await setDoc(userRef, { currentAvatar: selectedItem.icon }, { merge: true });
+        alert(`Avatar ${selectedItem.icon} equipaggiato!`);
+    } 
+    // Se è da comprare, controlla i coins spendibili e scalali
+    else if (currentCoins >= selectedItem.cost) {
+        currentCoins -= selectedItem.cost; // <--- SOTTRAE I PUNTI
+        unlockedAvatars.push(avatarId);
+        
+        await setDoc(userRef, { 
+            unlockedAvatars: unlockedAvatars,
+            currentAvatar: selectedItem.icon,
+            coins: currentCoins // Salva il nuovo saldo inferiore
+        }, { merge: true });
+        
+        alert(`Acquistato! Saldo rimanente: ${currentCoins} pts`);
+    } else {
+        alert(`Punti insufficienti! Ti servono ${selectedItem.cost} pts (Disponibili: ${currentCoins}).`);
+    }
+    
+    // Aggiorna visivamente lo shop con i nuovi dati aggiornati
+    const freshDoc = await getDoc(userRef);
+    if (freshDoc.exists()) window.renderShop(freshDoc.data());
+};
+
+window.renderShop = function(userData) {
+    const shopContainer = document.getElementById("avatarShopContainer");
+    if (!shopContainer) return;
+
+    // Mostriamo i coins (punti spendibili) invece del punteggio totale fisso
+    const currentCoins = userData.coins !== undefined ? userData.coins : 0;
+    const unlocked = userData.unlockedAvatars || ["cyber_ghost"];
+    const currentAvatar = userData.currentAvatar || "👻";
+
+    shopContainer.innerHTML = `<h4 style="color:var(--neon-blue); font-size:0.85rem; margin:15px 0 8px 0; border-top:1px dashed #222; padding-top:10px; text-transform:uppercase;">🛒 SHOP AVATAR (Disponibili: ${currentCoins} pts)</h4>`;
+    
+    window.avatarShopItems.forEach(item => {
+        let btnText = `${item.cost} pts`;
+        let btnStyle = "background:#222; color:#aaa; border:1px solid #444;";
+        
+        if (unlocked.includes(item.id)) {
+            if (currentAvatar === item.icon) {
+                btnText = "ATTIVO";
+                btnStyle = "background:var(--neon-green); color:black; font-weight:bold; border:none;";
+            } else {
+                btnText = "USA";
+                btnStyle = "background:#00d4ff; color:black; font-weight:bold; border:none;";
+            }
+        } else if (currentCoins < item.cost) {
+            btnStyle = "background:#111; color:#444; border:1px solid #222; cursor:not-allowed;";
+        }
+
+        shopContainer.innerHTML += `
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#0b0d13; padding:6px 10px; border-radius:6px; margin-bottom:5px; font-size:0.8rem;">
+                <span><span style="font-size:1.1rem; margin-right:8px;">${item.icon}</span> ${item.name}</span>
+                <button type="button" onclick="buyOrEquipAvatar('${item.id}')" style="padding:4px 8px; font-size:0.7rem; border-radius:4px; cursor:pointer; ${btnStyle}">${btnText}</button>
+            </div>
+        `;
+    });
+};
 ];
 
 // Funzione globale per acquistare/equipaggiare un avatar

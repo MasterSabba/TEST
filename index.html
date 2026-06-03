@@ -2,715 +2,910 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MasterBlock</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta name="google-site-verification" content="bSyuxHebRemnINvhMQQhHxEVCsQ-AE-t-AH00CiJEXo" />
+
+    <title>MasterSabba Games</title>
+    <meta name="description" content="Gioca gratis online a sfide di logica, strategia e intuito. Batti record e conquista le classifiche di MasterSabba Games.">
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="MasterSabba Games.png">
+    <link rel="apple-touch-icon" href="MasterSabba Games.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <style>
         :root {
-            --bg-color: #0f172a;         
-            --text-color: #f8fafc;       
-            --grid-bg: #1e293b;          
-            --cell-empty: #0f172a;       
-            --block-color: #3b82f6;      
-            --primary-btn: #3b82f6;
-            --success: #22c55e;
-            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --neon-red: #ff073a;
+            --neon-orange: #ff9800;
+            --neon-yellow: #ffee00;
+            --neon-green: #39ff14;
+            --neon-emerald: #05ffc5;
+            --neon-cyan: #00ffff;
+            --neon-blue: #00d4ff;
+            --neon-blue-block: #3b82f6; 
+            --neon-purple: #bc13fe;
+            --neon-silver: #e0e0e0;
+            --neon-white: #ffffff;
+            --bg-dark: #050505;
         }
 
-        * {
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
             box-sizing: border-box;
+        }
+        
+
+        h1 {
+            font-size: 1.6rem;
+            letter-spacing: 5px;
+            margin: 25px 0 5px 0;
+            text-shadow: 0 0 15px var(--neon-blue);
+            font-weight: 900;
+            text-align: center;
+            cursor: pointer;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-family);
-            overflow: hidden; 
-            touch-action: none; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100dvh;
-        }
-
-        .exit-button {
-            position: absolute;
-            top: 15px;
-            left: 20px;
-            font-size: 2rem;
-            line-height: 1;
-            color: #333; 
-            text-decoration: none;
-            z-index: 2001;
-            transition: all 0.2s ease;
-            font-family: Arial, sans-serif;
-        }
-        .exit-button:hover {
-            color: var(--text-color); 
-            transform: scale(1.1);
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 2.8rem;
-            letter-spacing: 2px;
+        .author-credits {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: #666;
+            margin-bottom: 25px;
             text-transform: uppercase;
-            text-align: center;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .author-credits:hover {
+            color: var(--neon-purple);
+            text-shadow: 0 0 10px var(--neon-purple);
         }
 
-        .title-master {
-            color: #ffffff;
-        }
-
-        .title-block {
-            color: var(--block-color); 
-        }
-
-        #start-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        .search-box {
             width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-            z-index: 50;
-            position: absolute;
-            top: 0; left: 0;
-            padding: 20px;
+            max-width: 400px;
+            margin-bottom: 15px;
         }
 
-        .menu-subtitle {
-            color: #64748b;
-            font-size: 1rem;
-            margin-top: 5px;
-            margin-bottom: 50px;
-            letter-spacing: 1px;
-        }
-
-        .main-menu-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        #gameSearch {
             width: 100%;
-            max-width: 280px;
-        }
-
-        .action-btn {
-            background: #1e293b;
-            border: 2px solid #334155;
-            color: #ffffff;
-            padding: 18px 20px;
+            padding: 14px 25px;
+            background: #111;
+            border: 1px solid #333;
             border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.15s ease;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #gameSearch:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0,212,255,0.2); }
+
+        /* NAV MENU */
+        .hub-actions {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-        }
-
-        .action-btn span {
-            font-size: 0.8rem;
-            font-weight: normal;
-            color: #94a3b8;
-        }
-
-        .btn-challenge {
-            border-color: #ef4444;
-        }
-        
-        .btn-challenge span {
-            color: #fca5a5;
-        }
-
-        .action-btn:active {
-            transform: scale(0.98);
-            background: #334155;
-        }
-
-        #game-screen {
-            display: none; 
-            flex-direction: column;
-            align-items: center;
+            gap: 10px;
             width: 100%;
-            max-width: 420px; /* Ridotto leggermente per evitare sballi su tablet */
-            padding: 10px;
-            height: 100%;
-            justify-content: space-between; /* Distribuisce lo spazio equamente */
+            max-width: 400px;
+            margin-bottom: 25px;
         }
-
-        .game-header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 35px; 
-            margin-bottom: 10px;
-        }
-
-        .score-box {
-            background: #1e293b;
-            padding: 8px 12px;
+        .hub-btn {
+            flex: 1;
+            padding: 11px;
+            background: #111;
+            border: 1px solid #222;
             border-radius: 8px;
-            text-align: center;
-            min-width: 85px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-
-        .score-label {
+            color: #888;
+            font-weight: bold;
             font-size: 0.75rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            margin-bottom: 3px;
-        }
-
-        .score-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-
-        .game-title-small h1 {
-            font-size: 1.4rem;
-        }
-
-        /* CORREZIONE GRIGLIA: Dimensione stabile basata sulla larghezza massima senza subire variazioni */
-        #game-board {
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            grid-template-rows: repeat(8, 1fr);
-            gap: 3px;
-            background-color: var(--grid-bg);
-            padding: 6px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 380px; 
-            aspect-ratio: 1 / 1;
-            margin: 0 auto;
-        }
-
-        .cell {
-            background-color: var(--cell-empty);
-            border-radius: 4px;
-        }
-
-        .cell.filled {
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.4);
-        }
-
-        .cell.obstacle {
-            background-color: #475569 !important;
-            box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
-            position: relative;
-        }
-
-        /* CORREZIONE CONTENITORE PEZZI: Spazio fisso e sicuro sul fondo */
-        #pieces-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 15px;
-            margin-bottom: 20px;
-            height: 110px;
-            width: 100%;
-        }
-
-        .piece-slot {
-            width: 100px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(30, 41, 59, 0.2); /* Un leggero fondo per i tre slot di gioco */
-            border-radius: 8px;
-        }
-
-        .piece {
-            display: grid;
-            gap: 2px;
-            cursor: grab;
-        }
-
-        .piece:active {
-            cursor: grabbing;
-        }
-
-        .piece-cell {
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
-        }
-
-        .piece-cell.empty {
-            background-color: transparent;
-        }
-
-        .dragging {
-            position: fixed;
-            pointer-events: none; 
-            z-index: 1000;
-        }
-
-        #game-over {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.96);
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        #game-over h2 {
-            color: #ef4444;
-            font-size: 3rem;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-
-        #game-over button {
-            padding: 12px 28px;
-            font-size: 1.1rem;
-            background: var(--primary-btn);
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
+            letter-spacing: 1px;
             cursor: pointer;
-            font-weight: bold;
-            margin-top: 20px;
-            width: 200px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            -webkit-tap-highlight-color: transparent;
         }
+        #btnAuth { border-color: var(--neon-blue); color: var(--neon-blue); }
+        #btnAuth.logged-in { border-color: var(--neon-emerald); color: var(--neon-emerald); text-shadow: 0 0 5px var(--neon-emerald); }
+        #btnLeaderboard { border-color: var(--neon-purple); color: var(--neon-purple); }
+        #btnInstallApp { border-color: var(--neon-green); color: var(--neon-green); display: none; }
+
+        /* OVERLAY MODALS UNIVERSALI */
+        .secret-panel {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,5,5,0.96);
+            z-index: 3000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: 0.3s ease; font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        .secret-panel.active { opacity: 1; pointer-events: auto; }
         
-        .menu-btn {
-            background: #334155 !important;
-            margin-top: 10px !important;
+        .terminal {
+            width: 95%; max-width: 420px; background: #0c0d12; border: 2px solid #222;
+            border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); position: relative;
+            max-height: 85vh; overflow-y: auto; box-sizing: border-box;
+            scrollbar-width: thin; scrollbar-color: #333 #0c0d12;
         }
+        .terminal-header { border-bottom: 1px solid #222; padding-bottom: 12px; margin-bottom: 20px; font-weight: bold; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; text-align: center; }
+        .close-terminal { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--neon-red); font-size: 1.8rem; cursor: pointer; font-weight: bold; line-height: 1; }
+
+        /* SEZIONE ACCESSO */
+        .auth-form-container input {
+            width: 100%; padding: 12px; margin-bottom: 12px; background: #13141f; border: 1px solid #25283a;
+            border-radius: 8px; color: white; box-sizing: border-box; outline: none; transition: 0.2s;
+        }
+        .auth-form-container input:focus { border-color: var(--neon-blue); box-shadow: 0 0 8px rgba(0,212,255,0.2); }
+        .auth-btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        .auth-sub-btn {
+            flex: 1; padding: 12px; background: transparent; border: 1px solid var(--neon-silver);
+            color: white; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; transition: 0.2s;
+        }
+        .auth-sub-btn.primary { background: var(--neon-blue); color: black; border-color: var(--neon-blue); }
+        .auth-sub-btn.primary:active { background: transparent; color: var(--neon-blue); }
+        
+        .agent-profile-box {
+            background: linear-gradient(135deg, #091a1e 0%, #06070c 100%);
+            border: 1px solid var(--neon-emerald); border-radius: 10px; padding: 20px; margin-bottom: 20px;
+            text-align: left; box-shadow: 0 0 15px rgba(5,255,197,0.05);
+        }
+
+        /* SEZIONE CLASSIFICHE */
+        .overlord-box { 
+            background: linear-gradient(180deg, rgba(255, 238, 0, 0.08) 0%, rgba(0,0,0,0) 100%); 
+            border: 1px dashed var(--neon-yellow); padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; 
+            box-shadow: 0 0 15px rgba(255,238,0,0.05);
+        }
+        .game-rank-section { margin-bottom: 16px; background: #11131c; border: 1px solid #1e2030; border-radius: 10px; padding: 12px; text-align: left; }
+        .game-rank-title { font-size: 0.85rem; color: var(--neon-cyan); margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; border-bottom: 1px solid #222; padding-bottom: 4px;}
+        .rank-item { display: flex; justify-content: space-between; font-size: 0.82rem; color: #ddd; padding: 5px 6px; margin: 3px 0; border-radius: 6px; }
+        .rank-item.top-1 { background: rgba(255, 215, 0, 0.08); border-left: 3px solid var(--neon-yellow); color: #fff; }
+        .rank-item.top-2 { background: rgba(192, 192, 192, 0.06); border-left: 3px solid var(--neon-silver); }
+        .rank-item.top-3 { background: rgba(205, 127, 50, 0.05); border-left: 3px solid #cd7f32; }
+
+        /* LISTA GIOCHI PRINCIPALE */
+        .list { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 450px; margin-bottom: 100px; }
+        .card {
+            position: relative; background: linear-gradient(90deg, #111 0%, #0a0a0a 100%);
+            border-left: 5px solid #333; border-radius: 8px; padding: 18px; text-decoration: none;
+            color: white; display: flex; align-items: center; transition: 0.3s; overflow: hidden;
+            -webkit-tap-highlight-color: transparent; user-select: none;
+        }
+        .card:active { transform: scale(0.98); background: #1a1a1a; }
+
+        .murder { border-left-color: var(--neon-red); }
+        .verbum { border-left-color: var(--neon-orange); }
+        .sudoku { border-left-color: var(--neon-yellow); }
+        .key { border-left-color: var(--neon-green); }
+        .wordle { border-left-color: var(--neon-emerald); }
+        .kittens { border-left-color: var(--neon-cyan); }
+        .uno { border-left-color: var(--neon-blue); }
+        .block { border-left-color: var(--neon-blue-block); }
+        .tris { border-left-color: var(--neon-purple); }
+        .password { border-left-color: var(--neon-silver); }
+        .chess { border-left-color: var(--neon-white); }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 20px; box-shadow: 0 0 10px currentColor; }
+        .info h2 { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .info p { margin: 2px 0 0 0; font-size: 0.75rem; color: #777; }
+
+        /* INTERFACCIA MASTERBOT */
+        #chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+        .chat-button {
+            width: 60px; height: 60px; background: #111; border: 2px solid var(--neon-blue); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 15px var(--neon-blue);
+            transition: 0.3s ease; position: relative; -webkit-tap-highlight-color: transparent;
+        }
+        .chat-button:active { transform: scale(0.9); }
+        .chat-badge {
+            position: absolute; top: -2px; right: -2px; width: 14px; height: 14px; background: var(--neon-red);
+            border-radius: 50%; box-shadow: 0 0 8px var(--neon-red); animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.8; } }
+
+        .chat-window {
+            display: flex; position: absolute; bottom: 75px; right: 0; width: 320px; background: #111;
+            border: 1px solid var(--neon-blue); border-radius: 15px; flex-direction: column; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); opacity: 0; transform: translateY(20px) scale(0.95);
+            pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .chat-window.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .chat-header { background: var(--neon-blue); color: black; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        
+        .chat-body { padding: 15px; display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto; }
+        .bot-msg { background: #1e293b; color: white; padding: 10px 14px; border-radius: 12px 12px 12px 0; font-size: 0.9rem; align-self: flex-start; max-width: 90%; border-left: 3px solid var(--neon-blue); line-height: 1.4; }
+        
+        .options-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .opt-btn { background: #050505; border: 1px solid #333; color: #ccc; padding: 8px 12px; border-radius: 20px; font-size: 0.78rem; cursor: pointer; transition: 0.2s; font-weight: 500; }
+        .opt-btn:active { border-color: var(--neon-blue); color: white; background: #111; }
+
+        .chat-form { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
+        .chat-form input, .chat-form textarea { background: #050505; border: 1px solid #333; color: white; padding: 10px; border-radius: 8px; outline: none; font-family: inherit; font-size: 0.85rem; transition: 0.2s; }
+        .chat-form input.invalid-email { border-color: var(--neon-red) !important; box-shadow: 0 0 5px rgba(255,7,58,0.3); }
+        .chat-form input.valid-email { border-color: var(--neon-green) !important; box-shadow: 0 0 5px rgba(57,255,20,0.3); }
+        .chat-form input:focus, .chat-form textarea:focus { border-color: var(--neon-blue); }
+        
+        .chat-form button { background: var(--neon-blue); border: none; padding: 11px; font-weight: bold; cursor: pointer; border-radius: 8px; color: black; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; transition: 0.2s; }
+        .chat-form button:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+
+        /* MODAL POPUP RATING */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .rating-box { background: #111; border: 2px solid var(--neon-yellow); border-radius: 16px; padding: 35px 25px; width: 90%; max-width: 350px; text-align: center; box-shadow: 0 0 25px rgba(255, 238, 0, 0.2); transform: scale(0.8); transition: 0.3s ease; }
+        .modal-overlay.show .rating-box { transform: scale(1); }
+        .rating-box h3 { margin: 0 0 10px 0; font-size: 1.3rem; color: var(--neon-yellow); }
+        .stars { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; flex-direction: row-reverse; }
+        .stars label { font-size: 2.6rem; color: rgba(255, 255, 255, 0.15); cursor: pointer; }
+        .stars label:hover, .stars label:hover ~ label { color: var(--neon-yellow); text-shadow: 0 0 10px rgba(255,238,0,0.6); }
+        .close-rating { font-size: 0.8rem; color: #555; background: none; border: none; text-decoration: underline; cursor: pointer; }
+
+        footer { margin-top: auto; padding: 20px 0; font-size: 0.75rem; color: #444; text-align: center; }
+        footer span { cursor: pointer; transition: 0.2s; }
+        footer span:hover { color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue); }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-    <a href="https://mastersabba.github.io/MasterSabba/" class="exit-button" title="Torna all'Hub">×</a>
+    <h1 id="hubTitle">MASTER GAMES</h1>
+    <div class="author-credits" onclick="togglePanel('secretPanel')">BY MASTERSABBA</div>
 
-    <div id="start-screen">
-        <h1><span class="title-master">MASTER</span> <span class="title-block">BLOCK</span></h1>
-        <div class="menu-subtitle">SELECT MODE</div>
+    <div class="search-box">
+        <input type="text" id="gameSearch" placeholder="CERCA UN GIOCO..." oninput="filter()">
+    </div>
+
+    <!-- MAIN NAV MENU -->
+    <div class="hub-actions">
+        <button id="btnAuth" class="hub-btn" onclick="togglePanel('authPanel')">👤 Accedi</button>
+        <button id="btnLeaderboard" class="hub-btn" onclick="openLeaderboard()">🏆 Classifiche</button>
+        <button id="btnInstallApp" class="hub-btn" onclick="triggerPWAInstallation()">📲 Installa</button>
+    </div>
+
+    <!-- CARDS LIST -->
+    <div class="list" id="gameList">
+        <a href="https://mastersabba.github.io/MasterMurder/" target="_blank" class="card murder">
+            <div class="dot" style="color: var(--neon-red); background: var(--neon-red);"></div>
+            <div class="info"><h2>MasterMurder</h2><p>Risolvi il caso</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterVerbum/" target="_blank" class="card verbum">
+            <div class="dot" style="color: var(--neon-orange); background: var(--neon-orange);"></div>
+            <div class="info"><h2>MasterVerbum</h2><p>Dizionario e velocità</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterSudoku/" target="_blank" class="card sudoku">
+            <div class="dot" style="color: var(--neon-yellow); background: var(--neon-yellow);"></div>
+            <div class="info"><h2>MasterSudoku</h2><p>Numeri e precisione</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterKey/" target="_blank" class="card key">
+            <div class="dot" style="color: var(--neon-green); background: var(--neon-green);"></div>
+            <div class="info"><h2>MasterKey</h2><p>Logica e codici segreti</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterWordle/" target="_blank" class="card wordle">
+            <div class="dot" style="color: var(--neon-emerald); background: var(--neon-emerald);"></div>
+            <div class="info"><h2>MasterWordle</h2><p>Indovina la parola</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterKittens/" target="_blank" class="card kittens">
+            <div class="dot" style="color: var(--neon-cyan); background: var(--neon-cyan);"></div>
+            <div class="info"><h2>MasterKittens</h2><p>Exploding Kittens</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterUno/" target="_blank" class="card uno">
+            <div class="dot" style="color: var(--neon-blue); background: var(--neon-blue);"></div>
+            <div class="info"><h2>MasterUno</h2><p>Sfida all'ultima carta</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterBlock/" target="_blank" class="card block">
+            <div class="dot" style="color: var(--neon-blue-block); background: var(--neon-blue-block);"></div>
+            <div class="info"><h2>MasterBlock</h2><p>Incastra i blocchi</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterTris/" target="_blank" class="card tris">
+            <div class="dot" style="color: var(--neon-purple); background: var(--neon-purple);"></div>
+            <div class="info"><h2>MasterTris</h2><p>Strategia 1vs1</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterPassword/" target="_blank" class="card password">
+            <div class="dot" style="color: var(--neon-silver); background: var(--neon-silver);"></div>
+            <div class="info"><h2>MasterPassword</h2><p>Sicurezza e Crittografia</p></div>
+        </a>
+        <a href="https://mastersabba.github.io/MasterChess/" target="_blank" class="card chess">
+            <div class="dot" style="color: var(--neon-white); background: var(--neon-white);"></div>
+            <div class="info"><h2>MasterChess</h2><p>Strategia e Scacchi</p></div>
+        </a>
+    </div>
+
+    <!-- OVERLAY: AUTHENTICATION TERMINAL -->
+    <div class="secret-panel" id="authPanel">
+        <div class="terminal" style="border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0,212,255,0.2);">
+            <button class="close-terminal" onclick="togglePanel('authPanel')">×</button>
+            
+            <div id="auth-logged-out" class="auth-form-container">
+                <div class="terminal-header" style="color: var(--neon-blue);">🔐 ACCESSO AGENTE</div>
+                <input type="text" id="authUsername" placeholder="Username (Obbligatorio)">
+                <input type="password" id="authPassword" placeholder="Password (Obbligatorio)">
+                <input type="email" id="authEmail" placeholder="Email (Facoltativa)">
+                <div class="auth-btn-group">
+                    <button class="auth-sub-btn" onclick="handleHubAuth('LOGIN')">Accedi</button>
+                    <button class="auth-sub-btn primary" onclick="handleHubAuth('SIGNUP')">Registrati</button>
+                </div>
+            </div>
+            
+            <div id="auth-logged-in" style="display: none;">
+                <div class="terminal-header" style="color: var(--neon-emerald);">🟢 PROFILO AGENTE ATTIVO</div>
+                <div class="agent-profile-box">
+                    <p style="margin: 0 0 8px 0; font-size: 1rem;">ID UTENTE: <span id="displayUser" style="color: var(--neon-emerald); font-weight: bold;">-</span></p>
+                    <p style="margin: 0 0 4px 0; font-size: 0.8rem; color: #888;">STATO: <span style="color: var(--neon-green)">ONLINE</span></p>
+                    <p style="margin: 0; font-size: 0.8rem; color: #888;">CLOUD: <span style="color: var(--neon-blue)">CRITTOGRAFATO ATTIVO</span></p>
+                </div>
+                <button class="auth-sub-btn" style="border-color: var(--neon-red); color: var(--neon-red); width: 100%;" onclick="handleHubLogout()">Scollegati dal Sistema</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- OVERLAY: LEADERBOARD TERMINAL -->
+    <div class="secret-panel" id="leaderboardPanel">
+        <div class="terminal" style="border-color: var(--neon-purple); box-shadow: 0 0 20px rgba(188,19,254,0.2);">
+            <button class="close-terminal" onclick="togglePanel('leaderboardPanel')">×</button>
+            <div class="terminal-header" style="color: var(--neon-purple);">🏆 CLASSIFICA GENERALE</div>
+            <div class="overlord-box">
+                <div style="font-size: 0.75rem; color: var(--neon-yellow); letter-spacing: 1px; font-weight: bold;">👑 CAMPIONE ASSOLUTO HIERARCHY</div>
+                <div id="globalOverlordName" style="font-size: 1.2rem; font-weight: bold; color: white; margin-top: 4px;">-</div>
+                <div id="globalOverlordScore" style="font-size: 0.8rem; color: #aaa;">0 Punti Totali</div>
+            </div>
+            <div id="leaderboardScoresContainer"></div>
+        </div>
+    </div>
+
+    <!-- OVERLAY: DIRETTORE SYSTEM CORE -->
+    <div class="secret-panel" id="secretPanel">
+        <div class="terminal" style="border-color: var(--neon-blue);">
+            <button class="close-terminal" onclick="togglePanel('secretPanel')">×</button>
+            <div class="terminal-header" style="color: var(--neon-blue);">🤖 SYSTEM_CORE.SYS</div>
+            <p><strong>> DIRETTORE DI PROGETTO:</strong> MasterSabba</p>
+            <p><strong>> STATO SISTEMA:</strong> Operativo</p>
+            <p><strong>> SVILUPPO:</strong> Vanilla JS / CSS Neon</p>
+            <p><strong>> SITO WEB:</strong> <a href="https://mastersabba.github.io/MasterSabba/" target="_blank" style="color:black; background:var(--neon-blue); padding:3px 8px; border-radius:4px; text-decoration:none; font-weight:bold;">Master Games</a></p>
+        </div>
+    </div>
+
+    <!-- OVERLAY: PRIVACY POLICY -->
+    <div class="secret-panel" id="privacyPanel">
+        <div class="terminal" style="border-color: var(--neon-silver); box-shadow: 0 0 25px rgba(255,255,255,0.1); text-align: left;">
+            <button class="close-terminal" style="color: var(--neon-silver);" onclick="togglePanel('privacyPanel')">×</button>
+            <div class="terminal-header" style="color: var(--neon-silver); text-align: center;">📄 PRIVACY POLICY </div>
+            <div style="font-size: 0.85rem; max-height: 60vh; overflow-y: auto; padding-right: 5px;">
+                <p><strong>1. Trattamento dei dati:</strong> Questo Hub non vende, cede o profila i dati personali degli utenti a scopi commerciali.</p>
+                <p><strong>2. LocalStorage di Gioco:</strong> Tutti i punteggi e i record standard vengono salvati unicamente all'interno del browser sul tuo dispositivo locale.</p>
+                <p><strong>3. Registrazione Classifica:</strong> Scegliendo di registrarsi per la Classifica Generale, viene memorizzato nel database unicamente lo Username e la Password cifrata. L'inserimento dell'Email è opzionale e serve solo come identificativo unico.</p>
+                <p><strong>4. Modulo Contatti (Master Bot):</strong> Eventuali messaggi o feedback inviati tramite il bot integrato utilizzano Formspree e l'indirizzo email fornito viene impiegato solo per rispondere alle comunicazioni.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT WIDGET MASTERBOT -->
+    <div id="chat-widget">
+        <div class="chat-window" id="chatWin">
+            <div class="chat-header">
+                <span>🤖 MASTER BOT</span>
+                <span onclick="toggleChat()" style="cursor:pointer; font-size: 1.4rem;">×</span>
+            </div>
+            
+            <div class="chat-body" id="chatBody">
+                <div id="chatSuccess" class="bot-msg" style="display: none; border-left-color: var(--neon-green); width:90%;"></div>
+
+                <div id="mainChatContent" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="bot-msg" id="welcomeMsg">
+                        Ciao! Sono l'assistente di Master Games. Come posso aiutarti oggi? Scegli un'opzione rapida o scrivi direttamente sotto!
+                        <div class="options-container">
+                            <button class="opt-btn" onclick="selectOption('🐛 [BUG] ')">Segnala un Bug</button>
+                            <button class="opt-btn" onclick="selectOption('💡 [IDEA] ')">Proponi un Gioco</button>
+                            <button class="opt-btn" onclick="selectOption('💬 [FEEDBACK] ')">Altro / Feedback</button>
+                        </div>
+                    </div>
+
+                    <form class="chat-form" id="masterForm">
+                        <input type="email" id="chatEmail" name="email" placeholder="La tua Email" required oninput="validateEmailRealTime(this)">
+                        <textarea id="chatMessage" name="message" rows="3" placeholder="Scrivi il tuo messaggio..." required></textarea>
+                        <button type="submit" id="submitBtn">INVIA MESSAGGIO</button>
+                    </form>
+                </div>
+            </div>
+        </div>
         
-        <div class="main-menu-buttons">
-            <button class="action-btn" onclick="startGame('standard')">
-                STANDARD
-            </button>
-            <button class="action-btn btn-challenge" onclick="startGame('challenge')">
-                CHALLENGE
-            </button>
+        <div class="chat-button" onclick="toggleChat()">
+            <div class="chat-badge" id="chatBadge"></div>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="var(--neon-blue)"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
         </div>
     </div>
 
-    <div id="game-screen">
-        <div class="game-header">
-            <div class="score-box">
-                <div class="score-label">Score</div>
-                <div class="score-value" id="score">0</div>
+    <!-- MODAL POPUP RATING -->
+    <div class="modal-overlay" id="ratingModal">
+        <div class="rating-box" id="ratingBox">
+            <h3>TI PIACCIONO I GIOCHI?</h3>
+            <p>Lascia una valutazione rapida a 5 stelle per supportare i progetti!</p>
+            <div class="stars">
+                <label onclick="submitRating(5)">★</label><label onclick="submitRating(4)">★</label><label onclick="submitRating(3)">★</label><label onclick="submitRating(2)">★</label><label onclick="submitRating(1)">★</label>
             </div>
-            
-            <div class="game-title-small" style="text-align: center;">
-                <h1><span class="title-master">Master</span><span class="title-block">Block</span></h1>
-                <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; color: var(--success); font-weight: bold; margin-top: 2px;">💎 <span id="hub-pts">0</span></div>
-            </div>
-
-            <div class="score-box">
-                <div class="score-label">Best</div>
-                <div class="score-value" id="best-score">0</div>
-            </div>
-        </div>
-
-        <div id="game-board"></div>
-
-        <div id="pieces-container">
-            <div class="piece-slot" id="slot-0"></div>
-            <div class="piece-slot" id="slot-1"></div>
-            <div class="piece-slot" id="slot-2"></div>
+            <button class="close-rating" onclick="closeRatingModal()">Più tardi</button>
         </div>
     </div>
 
-    <div id="game-over">
-        <h2>GAME OVER</h2>
-        <p>Punteggio Finale: <span id="final-score"></span></p>
-        <button onclick="resetGame()">Gioca Ancora</button>
-        <button class="menu-btn" onclick="returnToMenu()">Menu Principale</button>
-    </div>
+    <footer><span onclick="togglePanel('privacyPanel')">PRIVACY POLICY </span></footer>
 
-    <script>
-        // Rimuove immediatamente il focus all'avvio per prevenire crash grafici dovuti alle tastiere mobili
-        if (document.activeElement && typeof document.activeElement.blur === 'function') {
-            document.activeElement.blur();
-        }
+    
+ <script>
+    // Dati locali di fallback (fanno funzionare la classifica anche senza Firebase)
+    window.globalRivals = {
+        "MasterMurder": [{n: "CyberGhost", s: 15}, {n: "SabbaFan99", s: 10}, {n: "Rex_Logic", s: 5}],
+        "MasterVerbum": [{n: "WordHacker", s: 20}, {n: "CyberGhost", s: 12}, {n: "Alpha_User", s: 6}],
+        "MasterSudoku": [{n: "Matrix9", s: 18}, {n: "Rex_Logic", s: 11}, {n: "SabbaFan99", s: 4}],
+        "MasterKey": [{n: "CryptoKing", s: 14}, {n: "Matrix9", s: 9}, {n: "CyberGhost", s: 3}],
+        "MasterWordle": [{n: "WordHacker", s: 16}, {n: "SabbaFan99", s: 10}, {n: "CryptoKing", s: 5}],
+        "MasterKittens": [{n: "ExplodeMe", s: 3}, {n: "Alpha_User", s: 2}, {n: "Matrix9", s: 1}],
+        "MasterUno": [{n: "CardShark", s: 4}, {n: "CyberGhost", s: 2}, {n: "ExplodeMe", s: 1}],
+        "MasterBlock": [{n: "TetrisGod", s: 50}, {n: "Matrix9", s: 30}, {n: "Rex_Logic", s: 15}],
+        "MasterTris": [{n: "Alpha_User", s: 5}, {n: "CardShark", s: 3}, {n: "SabbaFan99", s: 1}],
+        "MasterPassword": [{n: "CryptoKing", s: 8}, {n: "CyberGhost", s: 5}, {n: "WordHacker", s: 2}],
+        "MasterChess": [{n: "DeepNeon", s: 12}, {n: "Rex_Logic", s: 8}, {n: "Alpha_User", s: 4}]
+    };
+    window.hubCurrentUser = null;
+    window.hubCachedScores = {};
 
-        const ROWS = 8;
-        const COLS = 8;
-        let board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
-        let score = 0;
-        let bestScore = localStorage.getItem('masterblock_best_score') || 0;
-        let activePieces = [null, null, null];
-        let gameMode = 'standard'; 
+    // Gestione Apertura Pannelli Generica (Leaderboard, Auth, Secret)
+    window.togglePanel = (id) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("active");
+    };
+
+    // Filtro Ricerca Giochi
+    window.filter = () => {
+        const val = document.getElementById('gameSearch').value.toLowerCase();
+        document.querySelectorAll('.card').forEach(c => {
+            c.style.display = c.innerText.toLowerCase().includes(val) ? "flex" : "none";
+        });
+    };
+
+    // BOT ENGINE (Con memoria di lettura per il Pallino Rosso)
+    window.toggleChat = function() { 
+        const chatWin = document.getElementById('chatWin');
+        if (chatWin) chatWin.classList.toggle('open'); 
         
-        let hubPoints = parseInt(localStorage.getItem('masterblock_hub_points')) || 0;
-        localStorage.setItem('points_masterblock', hubPoints); 
-        document.getElementById('hub-pts').innerText = hubPoints;
+        // Salva nel browser che l'utente ha aperto la chat almeno una volta
+        localStorage.setItem("masterbot_badge_hidden", "true");
 
-        document.getElementById('best-score').innerText = bestScore;
-
-        const boardEl = document.getElementById('game-board');
-        const scoreEl = document.getElementById('score');
-
-        const PIECES_LIB = [
-            [[1]], [[1,1]], [[1],[1]], [[1,1,1]], [[1],[1],[1]], 
-            [[1,1,1,1]], [[1],[1],[1],[1]], [[1,1],[1,1]], 
-            [[1,0],[1,1]], [[0,1],[1,1]], [[1,1],[1,0]], [[1,1],[0,1]],
-            [[1,1,1],[0,1,0]], [[1,0,0],[1,1,1]], [[1,1,1],[1,0,0]], [[1,1,1],[0,0,1]]
-        ];
-
-        function startGame(mode) {
-            gameMode = mode;
-            document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'flex';
-            resetGame();
+        // Nasconde il pallino rosso sul momento (intercettando ogni ID possibile)
+        const badge = document.getElementById('chatBadge') || 
+                      document.getElementById('chatNotification') || 
+                      document.getElementById('chatDot');
+        if (badge) {
+            badge.style.display = 'none';
+            badge.style.opacity = '0';
+            badge.classList.remove('show');
         }
+    };
 
-        function returnToMenu() {
-            document.getElementById('game-over').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'none';
-            document.getElementById('start-screen').style.display = 'flex';
+    window.selectOption = function(tag) { 
+        const txt = document.getElementById('chatMessage'); 
+        if (txt) {
+            if (!txt.value.includes(tag)) txt.value = tag + txt.value; 
+            txt.focus(); 
         }
+    };
 
-        function initBoard() {
-            board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
-            boardEl.innerHTML = '';
+    window.validateEmailRealTime = function(input) {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const btn = document.getElementById('submitBtn');
+        if (!btn) return false;
+        if (input.value.trim() === "") { input.classList.remove('valid-email', 'invalid-email'); btn.disabled = false; return false; }
+        if (emailRegex.test(input.value)) { input.classList.remove('invalid-email'); input.classList.add('valid-email'); btn.disabled = false; return true; } 
+        else { input.classList.remove('valid-email'); input.classList.add('invalid-email'); btn.disabled = true; return false; }
+    };
 
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS; c++) {
-                    const cell = document.createElement('div');
-                    cell.classList.add('cell');
-                    cell.id = `cell-${r}-${c}`;
-                    boardEl.appendChild(cell);
-                }
-            }
+    // VALUTAZIONE STELLE
+    window.closeRatingModal = function() { 
+        const rm = document.getElementById('ratingModal');
+        if (rm) rm.classList.remove('show'); 
+    };
 
-            if (gameMode === 'challenge') {
-                let obstaclesCount = 3 + Math.floor(Math.random() * 3); 
-                while (obstaclesCount > 0) {
-                    let randR = Math.floor(Math.random() * ROWS);
-                    let randC = Math.floor(Math.random() * COLS);
-                    if (board[randR][randC] === 0) {
-                        board[randR][randC] = 'obstacle'; 
-                        obstaclesCount--;
-                    }
-                }
-            }
-        }
+    window.submitRating = function(stars) {
+        localStorage.setItem("hub_game_rated", stars);
+        
+        fetch('https://formspree.io/f/xbdzvell', { 
+            method: 'POST', 
+            body: JSON.stringify({ Valutazione: stars + " stelle" }), 
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            } 
+        });
 
-        function updateBoardVisuals() {
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS; c++) {
-                    const cell = document.getElementById(`cell-${r}-${c}`);
-                    cell.className = 'cell'; 
-                    
-                    if (board[r][c] === 'obstacle') {
-                        cell.classList.add('obstacle');
-                        cell.style.backgroundColor = '';
-                    } else if (board[r][c] !== 0) {
-                        cell.classList.add('filled');
-                        cell.style.backgroundColor = board[r][c]; 
-                    } else {
-                        cell.style.backgroundColor = '';
-                    }
-                }
-            }
-        }
+        const rb = document.getElementById('ratingBox');
+        if (rb) rb.innerHTML = `<h3 style="color:var(--neon-green)">Grazie! ⭐ ${stars}/5</h3>`;
+        setTimeout(() => { window.closeRatingModal(); }, 2000);
+    };
 
-        function generatePieces() {
-            let generatedCount = 0;
-            for (let i = 0; i < 3; i++) {
-                if (!activePieces[i]) {
-                    const randomPiece = PIECES_LIB[Math.floor(Math.random() * PIECES_LIB.length)];
-                    activePieces[i] = randomPiece;
-                    renderPieceInSlot(randomPiece, i);
-                    generatedCount++;
-                }
-            }
-            if (generatedCount > 0) checkGameOver();
-        }
+ window.handleHubAuth = async function(mode) {
+    const userEl = document.getElementById("authUsername");
+    const passEl = document.getElementById("authPassword");
+    if(!userEl || !passEl) return;
+    
+    const user = userEl.value.trim();
+    const pass = passEl.value.trim();
+    const emailInput = document.getElementById("authEmail") ? document.getElementById("authEmail").value.trim() : "";
+    const email = emailInput || `${user.toLowerCase()}@masterhub.local`;
+    
+    if (!user || !pass) { alert("Inserisci Username e Password."); return; }
 
-        function renderPieceInSlot(shape, index) {
-            const slot = document.getElementById(`slot-${index}`);
-            slot.innerHTML = '';
+    try {
+        if (mode === "SIGNUP") {
+            const cred = await createUserWithEmailAndPassword(auth, email, pass);
+            // 1. Aggiorna immediatamente il profilo Firebase con l'username
+            await updateProfile(cred.user, { displayName: user });
+            // 2. Salva l'utente su Firestore
+            await setDoc(doc(db, "users", cred.user.uid), { username: user, scores: {} });
             
-            const pieceEl = document.createElement('div');
-            pieceEl.classList.add('piece');
-            pieceEl.style.gridTemplateColumns = `repeat(${shape[0].length}, 24px)`;
+            // 3. TRUCCO CRUCIALE: Forza l'applicazione a riconoscere subito l'username locale
+            window.hubCurrentUser = user; 
             
-            const solidColors = ['#c0392b', '#e67e22', '#f1c40f', '#27ae60', '#2980b9', '#8e44ad', '#d81b60', '#0097e6'];
-            const randomColor = solidColors[Math.floor(Math.random() * solidColors.length)];
+            alert("Registrazione completata!");
+        } else {
+            await signInWithEmailAndPassword(auth, email, pass);
+        }
+        if (window.togglePanel) window.togglePanel('authPanel');
+    } catch (e) { alert("Errore Account: " + e.message); }
+};
+     
+    window.handleHubLogout = window.handleHubLogout || function() {
+        alert("⚠️ Nessuna sessione cloud attiva.");
+    };
 
-            shape.forEach(row => {
-                row.forEach(val => {
-                    const block = document.createElement('div');
-                    block.classList.add('piece-cell');
-                    if (val === 0) {
-                        block.classList.add('empty');
-                    } else {
-                        block.style.backgroundColor = randomColor; 
-                    }
-                    pieceEl.appendChild(block);
-                });
+    // Costruzione dinamica della Classifica
+    window.buildLeaderboards = function() {
+        const container = document.getElementById("leaderboardScoresContainer");
+        if (!container) return;
+        container.innerHTML = "";
+        let totalAggregatedScores = {};
+
+        Object.values(window.globalRivals).forEach(list => list.forEach(p => totalAggregatedScores[p.n] = (totalAggregatedScores[p.n] || 0) + p.s));
+        
+        if (window.hubCurrentUser) {
+            let userSum = 0;
+            Object.values(window.hubCachedScores).forEach(s => userSum += s);
+            if(userSum > 0) totalAggregatedScores[window.hubCurrentUser] = userSum;
+        }
+
+        let absoluteWinner = "Nessuno", maxOverallScore = -1;
+        Object.keys(totalAggregatedScores).forEach(name => {
+            if (totalAggregatedScores[name] > maxOverallScore) { maxOverallScore = totalAggregatedScores[name]; absoluteWinner = name; }
+        });
+        if(document.getElementById("globalOverlordName")) document.getElementById("globalOverlordName").textContent = absoluteWinner.toUpperCase();
+        if(document.getElementById("globalOverlordScore")) document.getElementById("globalOverlordScore").textContent = `${maxOverallScore} Punti Totali`;
+
+        Object.keys(window.globalRivals).forEach(game => {
+            let structure = [...window.globalRivals[game]];
+            let userScore = window.hubCachedScores[game] || parseInt(localStorage.getItem(`points_${game.toLowerCase()}`)) || 0;
+            
+            if (window.hubCurrentUser) {
+                let idx = structure.findIndex(item => item.n.toLowerCase() === window.hubCurrentUser.toLowerCase());
+                if (idx !== -1) { 
+                    if (userScore > structure[idx].s) structure[idx].s = userScore; 
+                } else if (userScore > 0) { 
+                    structure.push({ n: window.hubCurrentUser, s: userScore }); 
+                }
+            }
+            structure.sort((a, b) => b.s - a.s);
+
+            let section = document.createElement("div");
+            section.className = "game-rank-section";
+            section.style = "margin-bottom: 15px; background: #11131c; border: 1px solid #1e2030; padding: 10px; border-radius: 8px;";
+            section.innerHTML = `<h4 style="font-size:0.85rem; color:#00ffff; margin:0 0 5px 0; text-transform:uppercase;">${game}</h4>`;
+            
+            structure.slice(0, 3).forEach((row, i) => {
+                let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉";
+                let boldStyle = row.n === window.hubCurrentUser ? "color: #39ff14; font-weight: bold;" : "color: #ddd;";
+                section.innerHTML += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:3px 0; ${boldStyle}"><span>${medal} ${row.n}</span><span>${row.s} pts</span></div>`;
             });
+            container.appendChild(section);
+        });
+    };
 
-            pieceEl.addEventListener('pointerdown', (e) => startDrag(e, pieceEl, shape, index, randomColor));
-            slot.appendChild(pieceEl);
+    window.openLeaderboard = () => { window.buildLeaderboards(); window.togglePanel('leaderboardPanel'); };
+
+    // Inizializzazione Listener al boot della pagina
+    document.addEventListener("DOMContentLoaded", () => {
+        if (window.updateAuthUI) { window.updateAuthUI(); }
+
+        // CONTROLLO PERSISTENZA PALLINO ROSSO: Se è già stato letto in passato, nascondilo subito
+        if (localStorage.getItem("masterbot_badge_hidden") === "true") {
+            const badge = document.getElementById('chatBadge') || 
+                          document.getElementById('chatNotification') || 
+                          document.getElementById('chatDot');
+            if (badge) {
+                badge.style.display = 'none';
+                badge.style.opacity = '0';
+                badge.classList.remove('show');
+            }
         }
 
-        let draggedElement = null;
-        let dragData = null; 
-
-        function startDrag(e, element, shape, index, color) {
-            if (e.button !== 0 && e.type !== 'touchstart' && e.pointerType !== 'touch') return; 
-
-            dragData = { shape, index, color };
-            
-            draggedElement = element.cloneNode(true);
-            draggedElement.classList.add('dragging');
-            document.body.appendChild(draggedElement);
-
-            element.style.opacity = '0';
-
-            const boardRect = boardEl.getBoundingClientRect();
-            const gridCellWidth = boardRect.width / COLS;
-            const currentPieceCellWidth = 24; 
-            const exactScaleFactor = gridCellWidth / currentPieceCellWidth;
-
-            draggedElement.style.transform = `translate(-50%, -50%) scale(${exactScaleFactor})`;
-
-            moveDrag(e);
-
-            document.addEventListener('pointermove', moveDrag);
-            document.addEventListener('pointerup', endDrag);
+        // Ripristino email salvata
+        const savedEmail = localStorage.getItem("masterbot_user_email");
+        const emailInput = document.getElementById("chatEmail");
+        if (savedEmail && emailInput) { 
+            emailInput.value = savedEmail; 
+            window.validateEmailRealTime(emailInput); 
         }
-
-        function getGridCoords(e) {
-            if (!dragData) return { row: -1, col: -1 };
-            
-            const boardRect = boardEl.getBoundingClientRect();
-            const cellWidth = boardRect.width / COLS;
-            const cellHeight = boardRect.height / ROWS;
-
-            const yOffset = e.pointerType === 'touch' ? 75 : 0;
-            const targetX = e.clientX - boardRect.left;
-            const targetY = (e.clientY - yOffset) - boardRect.top;
-
-            const shape = dragData.shape;
-            const pRows = shape.length;
-            const pCols = shape[0].length;
-
-            const col = Math.round((targetX / cellWidth) - (pCols / 2));
-            const row = Math.round((targetY / cellHeight) - (pRows / 2));
-
-            return { row, col };
+        
+        // Trigger automatico modale recensioni
+        if (localStorage.getItem("pending_rating") && !localStorage.getItem("hub_game_rated")) {
+            setTimeout(() => { 
+                const rm = document.getElementById('ratingModal');
+                if (rm) rm.classList.add('show'); 
+                localStorage.removeItem("pending_rating"); 
+            }, 2000);
         }
+        document.querySelectorAll('.card').forEach(card => card.addEventListener('click', () => { if (!localStorage.getItem("hub_game_rated")) localStorage.setItem("pending_rating", "true"); }));
 
-        function moveDrag(e) {
-            if (!draggedElement) return;
-
-            draggedElement.style.left = `${e.clientX}px`;
-            const yOffset = e.pointerType === 'touch' ? 75 : 0;
-            draggedElement.style.top = `${e.clientY - yOffset}px`;
-
-            document.querySelectorAll('.cell.preview').forEach(cell => {
-                cell.classList.remove('preview');
-                if(!cell.classList.contains('obstacle')) cell.style.backgroundColor = '';
-                cell.style.opacity = '';
+        // Click Segreto sul Titolo
+        let titleClicks = 0;
+        const titleEl = document.getElementById('hubTitle');
+        if (titleEl) {
+            titleEl.addEventListener('click', () => { 
+                titleClicks++; 
+                if (titleClicks === 3) { window.togglePanel('secretPanel'); titleClicks = 0; } 
+                setTimeout(() => { titleClicks = 0; }, 1200); 
             });
+        }
 
-            const { row, col } = getGridCoords(e);
-            if (canPlace(dragData.shape, row, col)) {
-                const shape = dragData.shape;
-                for (let r = 0; r < shape.length; r++) {
-                    for (let c = 0; c < shape[r].length; c++) {
-                        if (shape[r][c] === 1) {
-                            const cellEl = document.getElementById(`cell-${row + r}-${col + c}`);
-                            if (cellEl && !cellEl.classList.contains('obstacle')) {
-                                cellEl.classList.add('preview');
-                                cellEl.style.backgroundColor = dragData.color;
-                                cellEl.style.opacity = '0.5';
+        // Invio Form di contatto Formspree Chat
+        const mf = document.getElementById('masterForm');
+        if (mf) {
+            mf.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const btn = document.getElementById('submitBtn');
+                if (btn) { btn.textContent = 'INVIANDO...'; btn.disabled = true; }
+                
+                const chatEmail = document.getElementById('chatEmail');
+                if (chatEmail) localStorage.setItem("masterbot_user_email", chatEmail.value);
+                
+                fetch('https://formspree.io/f/xbdzvell', { method: 'POST', body: new FormData(this), headers: { 'Accept': 'application/json' } })
+                .then(res => {
+                    if (res.ok) {
+                        const mcc = document.getElementById('mainChatContent');
+                        if (mcc) mcc.style.display = 'none';
+                        const success = document.getElementById('chatSuccess'); 
+                        if (success) {
+                            success.style.display = 'block';
+                            success.innerHTML = `Grazie! Il tuo messaggio è stato recapitato a MasterSabba. 🚀<br><br>Ti risponderò presto!`;
+                        }
+                        setTimeout(() => { 
+                            window.toggleChat(); 
+                            this.reset(); 
+                            if (btn) { btn.textContent = 'INVIA MESSAGGIO'; btn.disabled = false; }
+                            if (success) success.style.display = 'none'; 
+                            if (mcc) mcc.style.display = 'flex'; 
+                            
+                            const se = localStorage.getItem("masterbot_user_email"); 
+                            if (se && chatEmail) { 
+                                chatEmail.value = se; 
+                                window.validateEmailRealTime(chatEmail); 
                             }
-                        }
+                        }, 3000);
                     }
-                }
+                });
+            });
+        }
+    });
+</script>
+
+
+<script type="module">
+    import { auth, db } from "./firebase.js";
+    import { 
+        createUserWithEmailAndPassword, 
+        signInWithEmailAndPassword, 
+        signOut, 
+        onAuthStateChanged,
+        updateProfile 
+    } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    // IMPORT UNIFICATO E CORRETTO (Tutti gli strumenti in alto)
+    import { doc, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+    // Se arriviamo qui, il file firebase.js è corretto! Sovrascriviamo le funzioni di Login/Registrazione
+    window.handleHubAuth = async function(mode) {
+        const userEl = document.getElementById("authUsername");
+        const passEl = document.getElementById("authPassword");
+        if(!userEl || !passEl) return;
+        
+        const user = userEl.value.trim();
+        const pass = passEl.value.trim();
+        const emailInput = document.getElementById("authEmail") ? document.getElementById("authEmail").value.trim() : "";
+        const email = emailInput || `${user.toLowerCase()}@masterhub.local`;
+        
+        if (!user || !pass) { alert("Inserisci Username e Password."); return; }
+
+        try {
+            if (mode === "SIGNUP") {
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                await updateProfile(cred.user, { displayName: user });
+                await setDoc(doc(db, "users", cred.user.uid), { username: user, scores: {} });
+                alert("Registrazione completata!");
+            } else {
+                await signInWithEmailAndPassword(auth, email, pass);
             }
+            if (window.togglePanel) window.togglePanel('authPanel');
+        } catch (e) { alert("Errore Account: " + e.message); }
+    };
+
+    window.handleHubLogout = () => signOut(auth);
+
+    // Sincronizzazione punti automatici LocalStorage -> Cloud Firestore
+    async function syncLocalPointsToProfile(uid) {
+        let updated = false;
+        Object.keys(window.globalRivals).forEach(g => {
+            const localScore = parseInt(localStorage.getItem(`points_${g.toLowerCase()}`)) || 0;
+            if (localScore > (window.hubCachedScores[g] || 0)) {
+                window.hubCachedScores[g] = localScore;
+                updated = true;
+            }
+        });
+        if (updated && uid) {
+            try { await setDoc(doc(db, "users", uid), { scores: window.hubCachedScores }, { merge: true }); } catch(e) { console.error(e); }
+        }
+    }
+
+   onAuthStateChanged(auth, async (user) => {
+    const btn = document.getElementById("btnAuth");
+    if (!btn) return;
+    if (user) {
+        // Se il displayName non è ancora pronto, facciamo un reload asincrono del profilo cloud
+        if (!user.displayName) {
+            try { await user.reload(); } catch (e) { console.error(e); }
         }
 
-        function endDrag(e) {
-            document.removeEventListener('pointermove', moveDrag);
-            document.removeEventListener('pointerup', endDrag);
+        // Recuperiamo i dati da Firestore
+        let dbUsername = null;
+        try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const data = userDoc.data();
+                if (data.scores) window.hubCachedScores = data.scores;
+                if (data.username) dbUsername = data.username; // Prende il nome salvato su database
+            }
+            await syncLocalPointsToProfile(user.uid);
+        } catch(e) { console.error("Errore Caricamento Profili Cloud:", e); }
 
-            if (!draggedElement) return;
+        // PRIORITÀ DEL NOME: 1. DisplayName aggiornato, 2. Nome da Database, 3. Fallback finale
+        window.hubCurrentUser = user.displayName || dbUsername || "Agente Anonimo";
+        
+        // Aggiorna la UI
+        btn.textContent = `🟢 ${window.hubCurrentUser.toUpperCase()}`;
+        btn.classList.add("logged-in");
+        if (document.getElementById("auth-logged-out")) document.getElementById("auth-logged-out").style.display = "none";
+        if (document.getElementById("auth-logged-in")) document.getElementById("auth-logged-in").style.display = "block";
+        if (document.getElementById("displayUser")) document.getElementById("displayUser").textContent = window.hubCurrentUser.toUpperCase();
+        
+    } else {
+        window.hubCurrentUser = null;
+        window.hubCachedScores = {};
+        btn.textContent = "👤 Accedi";
+        btn.classList.remove("logged-in");
+        if (document.getElementById("auth-logged-out")) document.getElementById("auth-logged-out").style.display = "block";
+        if (document.getElementById("auth-logged-in")) document.getElementById("auth-logged-in").style.display = "none";
+    }
 
-            document.querySelectorAll('.cell.preview').forEach(cell => {
-                cell.classList.remove('preview');
-                if(!cell.classList.contains('obstacle')) cell.style.backgroundColor = '';
-                cell.style.opacity = '';
+    // Aggiorna le classifiche con i nuovi dati corretti
+    fetchGlobalLeaderboards();
+});
+    // Scarica i punteggi reali di tutti i giocatori registrati da Firestore
+    async function fetchGlobalLeaderboards() {
+        try {
+            const querySnapshot = await getDocs(collection(db, "users"));
+            let updatedRivals = {
+                "MasterMurder": [], "MasterVerbum": [], "MasterSudoku": [], "MasterKey": [],
+                "MasterWordle": [], "MasterKittens": [], "MasterUno": [], "MasterBlock": [],
+                "MasterTris": [], "MasterPassword": [], "MasterChess": []
+            };
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const username = data.username;
+                const scores = data.scores || {};
+
+                if (username) {
+                    Object.keys(updatedRivals).forEach(game => {
+                        if (scores[game] !== undefined && scores[game] > 0) {
+                            updatedRivals[game].push({ n: username, s: scores[game] });
+                        }
+                    });
+                }
             });
 
-            const { row, col } = getGridCoords(e);
-            let placed = false;
-
-            if (canPlace(dragData.shape, row, col)) {
-                placePiece(dragData.shape, row, col, dragData.color);
-                placed = true;
-            }
-
-            draggedElement.remove();
-            draggedElement = null;
-
-            const originalSlot = document.getElementById(`slot-${dragData.index}`);
-            
-            if (placed) {
-                originalSlot.innerHTML = '';
-                activePieces[dragData.index] = null;
-                
-                let blocksPlaced = dragData.shape.flat().filter(v => v === 1).length;
-                addScore(blocksPlaced);
-
-                clearLines();
-                
-                if (activePieces.every(p => p === null)) {
-                    generatePieces();
-                } else {
-                    checkGameOver();
-                }
-            } else {
-                const originalPiece = originalSlot.querySelector('.piece');
-                if (originalPiece) originalPiece.style.opacity = '1';
-            }
-
-            dragData = null;
-        }
-
-        function canPlace(piece, row, col) {
-            for (let r = 0; r < piece.length; r++) {
-                for (let c = 0; c < piece[r].length; c++) {
-                    if (piece[r][c] === 1) {
-                        let boardRow = row + r;
-                        let boardCol = col + c;
-
-                        if (boardRow < 0 || boardRow >= ROWS || boardCol < 0 || boardCol >= COLS) return false;
-                        if (board[boardRow][boardCol] !== 0) return false; 
-                    }
-                }
-            }
-            return true;
-        }
-
-        function placePiece(piece, row, col, color) {
-            for (let r = 0; r < piece.length; r++) {
-                for (let c = 0; c < piece[r].length; c++) {
-                    if (piece[r][c] === 1) {
-                        board[row + r][col + c] = color; 
-                    }
-                }
-            }
-            updateBoardVisuals();
-        }
-
-        function clearLines() {
-            let rowsToClear = [];
-            let colsToClear = [];
-
-            for (let r = 0; r < ROWS; r++) {
-                if (board[r].every(cell => cell !== 0 && cell !== 'obstacle')) rowsToClear.push(r);
-            }
-
-            for (let c = 0; c < COLS; c++) {
-                let full = true;
-                for (let r = 0; r < ROWS; r++) {
-                    if (board[r][c] === 0 || board[r][c] === 'obstacle') full = false;
-                }
-                if (full) colsToClear.push(c);
-            }
-
-            let linesCleared = rowsToClear.length + colsToClear.length;
-            
-            if (linesCleared > 0) {
-                rowsToClear.forEach(r => {
-                    for (let c = 0; c < COLS; c++) board[r][c] = 0;
-                });
-                colsToClear.forEach(c => {
-                    for (let r = 0; r < ROWS; r++) board[r][c] = 0;
-                });
-
-                const bonus = [0, 10, 25, 45, 80]; 
-                addScore(bonus[Math.min(linesCleared, 4)]);
-
-                updateBoardVisuals();
-            }
-        }
-
-        function addScore(points) {
-            score += points;
-            scoreEl.innerText = score;
-
-            hubPoints += points;
-            localStorage.setItem('masterblock_hub_points', hubPoints);
-            localStorage.setItem('points_masterblock', hubPoints);
-            document.getElementById('hub-pts').innerText = hubPoints;
-
-            if (score > bestScore) {
-                bestScore = score;
-                document.getElementById('best-score').innerText = bestScore;
-                localStorage.setItem('masterblock_best_score', bestScore); 
-            }
-        }
-
-        function checkGameOver() {
-            let hasMoves = false;
-
-            for (let p = 0; p < activePieces.length; p++) {
-                const piece = activePieces[p];
-                if (!piece) continue;
-
-                for (let r = 0; r < ROWS; r++) {
-                    for (let c = 0; c < COLS; c++) {
-                        if (canPlace(piece, r, c)) {
-                            hasMoves = true;
-                            break;
+            Object.keys(updatedRivals).forEach(game => {
+                updatedRivals[game].sort((a, b) => b.s - a.s);
+                const fallbacks = window.globalRivals[game] || [];
+                if (updatedRivals[game].length < 3) {
+                    fallbacks.forEach(bot => {
+                        if (!updatedRivals[game].some(p => p.n.toLowerCase() === bot.n.toLowerCase())) {
+                            updatedRivals[game].push(bot);
                         }
-                    }
-                    if (hasMoves) break;
+                    });
+                    updatedRivals[game].sort((a, b) => b.s - a.s);
                 }
-                if (hasMoves) break;
-            }
+            });
 
-            if (!hasMoves) {
-                document.getElementById('final-score').innerText = score;
-                document.getElementById('game-over').style.display = 'flex';
-            }
+            window.globalRivals = updatedRivals;
+            if (window.buildLeaderboards) window.buildLeaderboards();
+        } catch (e) {
+            console.error("Errore caricamento classifica globale:", e);
         }
+    }
 
-        function resetGame() {
-            score = 0;
-            scoreEl.innerText = score;
-            activePieces = [null, null, null];
-            document.getElementById('game-over').style.display = 'none';
-            initBoard();
-            updateBoardVisuals();
-            generatePieces();
-        }
-    </script>
+    // PWA Installer Engine
+    let installPromptEvent;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault(); installPromptEvent = e;
+        if(document.getElementById('btnInstallApp')) document.getElementById('btnInstallApp').style.display = 'block';
+    });
+    window.triggerPWAInstallation = () => {
+        if (installPromptEvent) {
+            installPromptEvent.prompt();
+            installPromptEvent.userChoice.then((choice) => { if (choice.outcome === 'accepted' && document.getElementById('btnInstallApp')) document.getElementById('btnInstallApp').style.display = 'none'; installPromptEvent = null; });
+        } else { alert("Su iOS clicca su 'Condividi' -> 'Aggiungi alla schermata Home'."); }
+    };
+</script>
+
+
+
+    <!-- CHAT WIDGET: MASTERBOT -->
+<div id="chat-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <div class="chat-button" onclick="toggleChat()" style="width: 60px; height: 60px; background: #111; border: 2px solid #00d4ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 15px #00d4ff;">
+        <span style="font-size: 1.8rem;">🤖</span>
+        <div class="chat-badge" id="chatBadge" style="position: absolute; top: -2px; right: -2px; width: 14px; height: 14px; background: #ff073a; border-radius: 50%;"></div>
+    </div>
+    <div class="chat-window" id="chatWin" style="display: none; position: absolute; bottom: 75px; right: 0; width: 320px; background: #111; border: 1px solid #00d4ff; border-radius: 15px; flex-direction: column; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+        <div class="chat-header" style="background: #00d4ff; color: black; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+            <span>🤖 MASTER BOT</span>
+            <button onclick="toggleChat()" style="background:none; border:none; font-size:1.4rem; cursor:pointer; font-weight:bold;">×</button>
+        </div>
+        <div class="chat-body" style="padding: 15px; display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto;">
+            <div id="mainChatContent" style="display: flex; flex-direction: column; gap: 12px;">
+                <div class="bot-msg" style="background: #1e293b; color: white; padding: 10px 14px; border-radius: 12px 12px 12px 0; font-size: 0.9rem; border-left: 3px solid #00d4ff;">Ciao! Sono il MasterBot. Vuoi segnalare un bug o lasciare un feedback a MasterSabba?</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    <button type="button" style="background:#050505; border:1px solid #333; color:#ccc; padding:6px 10px; border-radius:20px; font-size:0.75rem; cursor:pointer;" onclick="selectOption('[BUG] ')">🐛 Bug</button>
+                    <button type="button" style="background:#050505; border:1px solid #333; color:#ccc; padding:6px 10px; border-radius:20px; font-size:0.75rem; cursor:pointer;" onclick="selectOption('[FEEDBACK] ')">💡 Idea</button>
+                    <button type="button" style="background:#050505; border:1px solid #333; color:#ccc; padding:6px 10px; border-radius:20px; font-size:0.75rem; cursor:pointer;" onclick="selectOption('[AIUTO] ')">❓ Login</button>
+                </div>
+                <form id="masterForm" style="display: flex; flex-direction: column; gap: 10px;">
+                    <input type="email" id="chatEmail" name="Email" placeholder="La tua email" required style="background:#050505; border:1px solid #333; color:white; padding:10px; border-radius:8px;">
+                    <textarea id="chatMessage" name="Messaggio" rows="3" placeholder="Scrivi qui..." required style="background:#050505; border:1px solid #333; color:white; padding:10px; border-radius:8px; font-family:inherit;"></textarea>
+                    <button type="submit" id="submitBtn" style="background:#00d4ff; border:none; padding:11px; font-weight:bold; cursor:pointer; border-radius:8px; color:black;">Invia</button>
+                </form>
+            </div>
+            <div id="chatSuccess" style="display: none; background: #1e293b; color: white; padding: 10px 14px; border-radius: 12px; font-size: 0.9rem; border-left: 3px solid #39ff14;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL POPUP: VALUTAZIONE STELLE -->
+<div id="ratingModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center;">
+    <div id="ratingBox" style="background: #111; border: 2px solid #ffee00; border-radius: 16px; padding: 30px 20px; width: 90%; max-width: 320px; text-align: center; box-shadow: 0 0 25px rgba(255, 238, 0, 0.2);">
+        <h3 style="margin: 0 0 10px 0; color: #ffee00;">Ti piace l'Hub?</h3>
+        <p style="font-size:0.85rem; color:#777; margin:0 0 20px 0;">Lascia una valutazione rapida per supportare il progetto!</p>
+        <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; flex-direction: row-reverse;">
+            <span style="font-size:2.3rem; cursor:pointer; color:rgba(255,255,255,0.2);" onclick="submitRating(5)" onmouseover="this.style.color='#ffee00'" onmouseout="this.style.color=''">⭐</span>
+            <span style="font-size:2.3rem; cursor:pointer; color:rgba(255,255,255,0.2);" onclick="submitRating(4)" onmouseover="this.style.color='#ffee00'" onmouseout="this.style.color=''">⭐</span>
+            <span style="font-size:2.3rem; cursor:pointer; color:rgba(255,255,255,0.2);" onclick="submitRating(3)" onmouseover="this.style.color='#ffee00'" onmouseout="this.style.color=''">⭐</span>
+            <span style="font-size:2.3rem; cursor:pointer; color:rgba(255,255,255,0.2);" onclick="submitRating(2)" onmouseover="this.style.color='#ffee00'" onmouseout="this.style.color=''">⭐</span>
+            <span style="font-size:2.3rem; cursor:pointer; color:rgba(255,255,255,0.2);" onclick="submitRating(1)" onmouseover="this.style.color='#ffee00'" onmouseout="this.style.color=''">⭐</span>
+        </div>
+        <button type="button" style="font-size: 0.8rem; color: #555; background: none; border: none; text-decoration: underline; cursor: pointer;" onclick="closeRatingModal()">Magari più tardi</button>
+    </div>
+</div>
 </body>
 </html>

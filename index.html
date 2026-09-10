@@ -839,7 +839,6 @@
 
     <!-- LOGICA JAVASCRIPT & FIREBASE AUTH INTEGRATO -->
     <script>
-        // CONFIGURAZIONE FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyBxZQF5OO5-znaipaPYeFcjOARjFXO1_gc",
             authDomain: "mastersabba-games.firebaseapp.com",
@@ -864,11 +863,9 @@
                 db = firebase.database();
                 auth = firebase.auth();
                 isFirebaseActive = true;
-                console.log("Firebase DB & Auth Connessi!");
             }
         } catch(e) { console.warn("Firebase non ancora attivato, uso localStorage.", e); }
 
-        // DATI ANTEPRIMA
         const gameDataMap = {
             'color-clash': { title: 'ColorStorm', desc: 'Sfidalo a colpi di combinazioni cromatiche e riflessi fulminei in questo card game.', controls: 'Click o Touch sulle carte compatibili.', url: 'https://mastersabba.github.io/MasterUno/' },
             'last-spark': { title: 'Spark Bombs', desc: 'Un party game a turni ad alta tensione in cui ogni mossa può scatenare l\'esplosione finale.', controls: 'Click sul mazzo per pescare o usare azioni.', url: 'https://mastersabba.github.io/MasterKittens/' },
@@ -884,7 +881,6 @@
             'master-blackjack': { title: 'Cyber Deck', desc: 'Tavolo da gioco sperimentale nel MasterLab con chip animate e sfide di carte.', controls: 'Tasti Carta, Stai, Puntata.', url: '#' }
         };
 
-        // RIVALI PER LA CLASSIFICA
         window.globalRivals = {
             "Cyber Crime": [{n: "CyberGhost", s: 15}, {n: "SabbaFan99", s: 10}, {n: "Rex_Logic", s: 5}],
             "Word Duel": [{n: "WordHacker", s: 20}, {n: "CyberGhost", s: 12}, {n: "Alpha_User", s: 6}],
@@ -902,7 +898,6 @@
         window.hubCurrentUser = null;
         window.hubCachedScores = {};
 
-        // STATO UTENTE
         const defaultState = {
             username: "Ospite",
             avatar: "⚡",
@@ -914,9 +909,16 @@
             winsPerGame: {}
         };
 
-        let userState = JSON.parse(localStorage.getItem('mastersabba_arcade_v2')) || defaultState;
+        let loadedState = JSON.parse(localStorage.getItem('mastersabba_arcade_v2')) || {};
+        let userState = {
+            ...defaultState,
+            ...loadedState,
+            ratings: loadedState.ratings || {},
+            achievements: { ...defaultState.achievements, ...(loadedState.achievements || {}) },
+            claimedQuests: loadedState.claimedQuests || {},
+            winsPerGame: loadedState.winsPerGame || {}
+        };
 
-        // GENERATORE SFIDE PROCEDURALI
         function generateProceduralQuests(currentState) {
             const lvl = Math.floor((currentState.xp || 0) / 300) + 1;
             const targetWins = Math.max(1, lvl);
@@ -924,56 +926,28 @@
             const targetXP = (lvl * 300);
 
             return [
-                {
-                    id: `q_win_lvl_${lvl}`,
-                    title: `🏆 Trionfo Arcade: Ottieni ${targetWins} vittorie`,
-                    reward: 50 * lvl,
-                    target: targetWins
-                },
-                {
-                    id: `q_vote_lvl_${lvl}`,
-                    title: `⭐ Critico Arcade: Vota ${targetVotes} giochi`,
-                    reward: 50 * lvl,
-                    target: targetVotes
-                },
-                {
-                    id: `q_xp_lvl_${lvl}`,
-                    title: `⚡ Traguardo XP: Raggiungi ${targetXP} XP totali`,
-                    reward: 60 * lvl,
-                    target: targetXP
-                },
-                {
-                    id: `q_lab_lvl_${lvl}`,
-                    title: `🧪 Innovatore: Prova il MasterLab`,
-                    reward: 80 * lvl,
-                    target: 1
-                }
+                { id: `q_win_lvl_${lvl}`, title: `🏆 Trionfo Arcade: Ottieni ${targetWins} vittorie`, reward: 50 * lvl, target: targetWins },
+                { id: `q_vote_lvl_${lvl}`, title: `⭐ Critico Arcade: Vota ${targetVotes} giochi`, reward: 50 * lvl, target: targetVotes },
+                { id: `q_xp_lvl_${lvl}`, title: `⚡ Traguardo XP: Raggiungi ${targetXP} XP totali`, reward: 60 * lvl, target: targetXP },
+                { id: `q_lab_lvl_${lvl}`, title: `🧪 Innovatore: Prova il MasterLab`, reward: 80 * lvl, target: 1 }
             ];
         }
 
-       // SISTEMA PUNTEGGIO: I PUNTI VENGONO ASSEGNATI SOLO IN CASO DI VITTORIA
-function registerWin(gameKey, pointsAwarded = 50) {
-    if (!userState.winsPerGame) userState.winsPerGame = {};
-    userState.winsPerGame[gameKey] = (userState.winsPerGame[gameKey] || 0) + 1;
-    
-    userState.xp = (userState.xp || 0) + pointsAwarded;
-    
-    saveState(); // Usa la stessa funzione di salvataggio
-    buildLeaderboards(); // Usa lo stesso metodo per aggiornare la classifica
-}
+        function registerWin(gameKey, pointsAwarded = 50) {
+            if (!userState.winsPerGame) userState.winsPerGame = {};
+            userState.winsPerGame[gameKey] = (userState.winsPerGame[gameKey] || 0) + 1;
+            userState.xp = (userState.xp || 0) + pointsAwarded;
+            saveState();
+            buildLeaderboards();
+        }
 
-function submitRating(targetId, ratingValue) {
-    // Inizializza l'oggetto se non esiste per evitare crash
-    if (!userState.ratings) userState.ratings = {}; 
+        function submitRating(targetId, ratingValue) {
+            if (!userState.ratings) userState.ratings = {}; 
+            userState.ratings[targetId] = ratingValue;
+            saveState();
+            buildLeaderboards(); 
+        }
 
-    // 1. Salva il voto
-    userState.ratings[targetId] = ratingValue;
-    saveState();
-
-    // 2. FORZA il ricalcolo della classifica
-    buildLeaderboards(); 
-}
-        // GESTIONE RESET GIORNALIERO E SFIDE
         const STORAGE_KEY_QUESTS = 'mastersabba_quests_data';
 
         function getOrUpdateDailyQuests(currentState) {
@@ -1007,7 +981,6 @@ function submitRating(targetId, ratingValue) {
         let resetTimerInterval = null;
         function startResetCountdown(lastResetTimestamp) {
             if (resetTimerInterval) clearInterval(resetTimerInterval);
-            
             const display = document.getElementById('quest-timer');
             const updateTimer = () => {
                 const timeRemaining = getTimeUntilReset(lastResetTimestamp);
@@ -1022,7 +995,6 @@ function submitRating(targetId, ratingValue) {
             resetTimerInterval = setInterval(updateTimer, 1000);
         }
 
-        // RISCATTO MANUALE DELLA SFIDA
         function claimQuestReward(questId) {
             let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY_QUESTS));
             if (!savedData) return;
@@ -1041,7 +1013,6 @@ function submitRating(targetId, ratingValue) {
             }
         }
 
-        // AUTENTICAZIONE E PROFILO
         function toggleAuthMode() {
             isRegistering = !isRegistering;
             const usernameInput = document.getElementById('username');
@@ -1142,7 +1113,15 @@ function submitRating(targetId, ratingValue) {
             if (!db) return;
             db.ref('users/' + uid).once('value').then((snapshot) => {
                 if (snapshot.exists()) {
-                    userState = { ...defaultState, ...snapshot.val() };
+                    let remoteData = snapshot.val();
+                    userState = {
+                        ...defaultState,
+                        ...remoteData,
+                        ratings: remoteData.ratings || {},
+                        achievements: { ...defaultState.achievements, ...(remoteData.achievements || {}) },
+                        claimedQuests: remoteData.claimedQuests || {},
+                        winsPerGame: remoteData.winsPerGame || {}
+                    };
                     window.hubCurrentUser = userState.username;
                 } else {
                     saveUserData(uid);
@@ -1182,7 +1161,6 @@ function submitRating(targetId, ratingValue) {
             }
         }
 
-        // CLOUD SYNC & LOCALSTORAGE
         function saveState() {
             localStorage.setItem('mastersabba_arcade_v2', JSON.stringify(userState));
             if (isFirebaseActive && currentUser) {
@@ -1234,7 +1212,6 @@ function submitRating(targetId, ratingValue) {
             buildLeaderboards();
         }
 
-        // Rende le sfide verificando i progressi reali con supporto sicuro per i contatori utente
         function renderQuests() {
             const container = document.getElementById('questContainer');
             if (!container) return;
@@ -1269,7 +1246,6 @@ function submitRating(targetId, ratingValue) {
                 }
                     
                 const canClaim = isConditionMet && !isCompleted;
-
                 if (canClaim) hasClaimableQuests = true;
 
                 const div = document.createElement('div');
@@ -1290,7 +1266,6 @@ function submitRating(targetId, ratingValue) {
             if (dot) dot.style.display = hasClaimableQuests ? 'block' : 'none';
         }
 
-        // COSTRUZIONE CLASSIFICA GENERALE CON OVERLORD E GIOCHI
         window.buildLeaderboards = function() {
             const container = document.getElementById("leaderboardScoresContainer");
             if (!container) return;
@@ -1462,7 +1437,6 @@ function submitRating(targetId, ratingValue) {
             });
         }
 
-        // CHATBOT INTERATTIVO
         function toggleChat() {
             const chat = document.getElementById('chatWindow');
             chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
@@ -1503,7 +1477,6 @@ function submitRating(targetId, ratingValue) {
             }, 350);
         }
 
-        // INITIALIZATION
         document.addEventListener('DOMContentLoaded', () => {
             updateUI();
             
@@ -1520,17 +1493,6 @@ function submitRating(targetId, ratingValue) {
                 checkLocalSession();
             }
         });
-
-        window.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'GAME_WIN') {
-    aggiornaClassifica(event.data.player, event.data.score);
-  }
-});
-
-window.addEventListener('focus', () => {
-  caricaClassificaDaLocalStorage();
-});
-
     </script>
 </body>
 </html>

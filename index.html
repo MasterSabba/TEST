@@ -3,8 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasterSabba Arcade | Cyber-Hub 2.0</title>
     
+    <!-- SEO & META TAG AVANZATI -->
+    <title>MasterSabba Arcade — Piattaforma Giochi & Hub Multigiocatore</title>
+    <meta name="description" content="Esplora la collezione arcade di MasterSabba: giochi di carte, puzzle, logica e investigazione, accumula XP e scala la classifica globale.">
+    <meta name="keywords" content="MasterSabba, Arcade, Web Games, PWA, Giochi online, Mini giochi, MasterLab">
+    <meta name="author" content="MasterSabba">
+
+    <!-- PWA & MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#06080e">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- APPLE TOUCH & iOS CONFIGURATIONS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sabba Arcade">
+    <link rel="apple-touch-icon" href="MasterSabba Games.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="MasterSabba Games.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="MasterSabba Games.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="MasterSabba Games.png">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,6 +92,14 @@
             font-size: 1.2rem;
             cursor: pointer;
         }
+
+        .nav-logo-icon {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+        
 
         .highlight { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 243, 255, 0.6); }
 
@@ -152,13 +179,16 @@
         /* HERO & SEARCH */
         .hero-section { text-align: center; padding: 2.5rem 1.5rem 1rem; }
         .hero-title {
-            font-family: var(--font-heading);
-            font-size: 2.4rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #fff, var(--neon-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.3rem;
+          font-family: var(--font-heading);
+          font-size: 2.4rem;
+          font-weight: 900;
+          color: var(--text-primary);
+          text-transform: uppercase;
+          letter-spacing: 2px;
+        }
+        .hero-title .highlight {
+          color: var(--neon-cyan);
+          text-shadow: 0 0 12px rgba(0, 243, 255, 0.6);
         }
         .hero-subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.5rem; }
 
@@ -427,7 +457,7 @@
     <!-- NAVBAR -->
     <header class="navbar">
         <div class="logo-container" onclick="openModal('infoModal')">
-            <span>⚡</span>
+            <img src="MasterSabba Games.png" class="nav-logo-icon" alt="Logo">
             <span>MASTER<span class="highlight">SABBA</span> ARCADE</span>
         </div>
         <div class="hub-actions">
@@ -444,7 +474,7 @@
 
     <!-- HERO & SEARCH -->
     <section class="hero-section">
-        <h1 class="hero-title">MASTER SABBA ARCADE</h1>
+        <h1 class="hero-title">MASTER<span class="highlight">SABBA</span> ARCADE</h1>
         <p class="hero-subtitle">Seleziona un titolo, accumula XP e scala la classifica globale.</p>
         
         <div class="search-container">
@@ -768,14 +798,14 @@
         </div>
     </div>
 
-    <!-- MODALE INFO -->
+   <!-- MODALE INFO -->
     <div id="infoModal" class="modal-overlay">
         <div class="modal-card" style="text-align: center;">
             <div class="modal-header">
-                <h3>MasterLab Architecture</h3>
+                <h3>Informazioni sul Progetto</h3>
                 <button class="modal-close" onclick="closeModal('infoModal')">✕</button>
             </div>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Arcade Hub su GitHub Pages con sync Cloud Firebase integrato.</p>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">La tua piattaforma di gioco personale e interattiva, sempre pronta e sincronizzata su tutti i tuoi dispositivi.</p>
             <button class="hub-btn" onclick="closeModal('infoModal')">Chiudi</button>
         </div>
     </div>

@@ -1520,6 +1520,17 @@ function submitRating(targetId, ratingValue) {
                 checkLocalSession();
             }
         });
+
+        window.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'GAME_WIN') {
+    aggiornaClassifica(event.data.player, event.data.score);
+  }
+});
+
+window.addEventListener('focus', () => {
+  caricaClassificaDaLocalStorage();
+});
+
     </script>
 </body>
 </html>

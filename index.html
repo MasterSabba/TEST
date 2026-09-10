@@ -928,28 +928,25 @@
                     id: `q_win_lvl_${lvl}`,
                     title: `🏆 Trionfo Arcade: Ottieni ${targetWins} vittorie`,
                     reward: 50 * lvl,
-                    check: (s) => {
-                        let totalWins = Object.values(s.winsPerGame || {}).reduce((a, b) => a + b, 0);
-                        return totalWins >= targetWins;
-                    }
+                    target: targetWins
                 },
                 {
                     id: `q_vote_lvl_${lvl}`,
                     title: `⭐ Critico Arcade: Vota ${targetVotes} giochi`,
                     reward: 50 * lvl,
-                    check: (s) => Object.keys(s.ratings || {}).length >= targetVotes
+                    target: targetVotes
                 },
                 {
                     id: `q_xp_lvl_${lvl}`,
                     title: `⚡ Traguardo XP: Raggiungi ${targetXP} XP totali`,
                     reward: 60 * lvl,
-                    check: (s) => (s.xp || 0) >= targetXP
+                    target: targetXP
                 },
                 {
                     id: `q_lab_lvl_${lvl}`,
                     title: `🧪 Innovatore: Prova il MasterLab`,
                     reward: 80 * lvl,
-                    check: (s) => !!(s.achievements && s.achievements.labTester)
+                    target: 1
                 }
             ];
         }
@@ -1254,9 +1251,9 @@
                     const xp = userState.xp || 0;
                     isConditionMet = xp >= (q.target || 300);
                 } else if (titleLower.includes('masterlab') || titleLower.includes('master lab') || titleLower.includes('prova')) {
-                    isConditionMet = !!(userState.visitedMasterLab || userState.masterLabTested || true);
+                    isConditionMet = !!(userState.achievements && userState.achievements.labTester);
                 } else {
-                    isConditionMet = q.progress !== undefined && q.target !== undefined ? q.progress >= q.target : false;
+                    isConditionMet = false;
                 }
                     
                 const canClaim = isConditionMet && !isCompleted;
@@ -1486,7 +1483,7 @@
                     reply = "I punti vengono assegnati in caso di vittoria nei giochi, votando le stelle, testando il MasterLab e riscattando le Sfide!";
                 } else if (lower.includes('consiglio') || lower.includes('gioco')) {
                     const games = ['ColorStorm', 'Spark Bombs', 'Word Rush', 'Cyber Crime', 'Royal Chess'];
-                    reply = `Ti consiglio di provare subito **${games[Math.floor(Math.random()*games.length)]}** e conquistare la vittoria!`;
+                    reply = `Ti consiglio di provare subito **${games[Math.floor(Math.random()*games.length)]}** e conquistar la vittoria!`;
                 }
 
                 messages.innerHTML += `<div class="msg bot">${reply}</div>`;

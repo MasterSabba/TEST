@@ -1,0 +1,15 @@
+{
+  "name": "MasterSabba Arcade",
+  "short_name": "SabbaArcade",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#06080e",
+  "theme_color": "#06080e",
+  "icons": [
+    {
+      "src": "MasterSabba Games.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}

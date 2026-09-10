@@ -951,16 +951,28 @@
             ];
         }
 
-        // SISTEMA PUNTEGGIO: I PUNTI VENGONO ASSEGNATI SOLO IN CASO DI VITTORIA
-        function registerWin(gameKey, pointsAwarded = 50) {
-            if (!userState.winsPerGame) userState.winsPerGame = {};
-            userState.winsPerGame[gameKey] = (userState.winsPerGame[gameKey] || 0) + 1;
-            
-            userState.xp += pointsAwarded;
-            saveState();
-            buildLeaderboards();
-        }
+       // SISTEMA PUNTEGGIO: I PUNTI VENGONO ASSEGNATI SOLO IN CASO DI VITTORIA
+function registerWin(gameKey, pointsAwarded = 50) {
+    if (!userState.winsPerGame) userState.winsPerGame = {};
+    userState.winsPerGame[gameKey] = (userState.winsPerGame[gameKey] || 0) + 1;
+    
+    userState.xp = (userState.xp || 0) + pointsAwarded;
+    
+    saveState(); // Usa la stessa funzione di salvataggio
+    buildLeaderboards(); // Usa lo stesso metodo per aggiornare la classifica
+}
 
+function submitRating(targetId, ratingValue) {
+    // Inizializza l'oggetto se non esiste per evitare crash
+    if (!userState.ratings) userState.ratings = {}; 
+
+    // 1. Salva il voto
+    userState.ratings[targetId] = ratingValue;
+    saveState();
+
+    // 2. FORZA il ricalcolo della classifica
+    buildLeaderboards(); 
+}
         // GESTIONE RESET GIORNALIERO E SFIDE
         const STORAGE_KEY_QUESTS = 'mastersabba_quests_data';
 

@@ -901,20 +901,18 @@
         };
 
         // Ascoltatore per i messaggi in arrivo dai minigiochi (tramite iframe)
-window.addEventListener('message', (event) => {
-    // Verifica che il messaggio contenga i dati di vittoria del gioco
-    if (event.data && event.data.type === 'GAME_WIN') {
-        const gameKey = event.data.gameKey;
-        console.log("Vittoria ricevuta dal gioco tramite postMessage:", gameKey);
-        
-        // Esegue la funzione dell'hub per aggiornare punti e classifiche
-        if (typeof triggerGameWin === 'function') {
-            triggerGameWin(gameKey);
-        } else {
-            console.error("La funzione triggerGameWin non è definita nell'hub.");
-        }
-    }
-});
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'GAME_WIN') {
+                const gameKey = event.data.gameKey;
+                console.log("Vittoria ricevuta dal gioco tramite postMessage:", gameKey);
+                
+                if (typeof triggerGameWin === 'function') {
+                    triggerGameWin(gameKey);
+                } else {
+                    console.error("La funzione triggerGameWin non è definita nell'hub.");
+                }
+            }
+        });
 
         window.hubCurrentUser = null;
         window.hubCachedScores = {};
@@ -1298,7 +1296,7 @@ window.addEventListener('message', (event) => {
             if (dot) dot.style.display = hasClaimableQuests ? 'block' : 'none';
         }
 
-        // COSTRUZIONE CLASSIFICA GENERALE CON OVERLORD E GIOCHI (PARTE AGGIORNATA)
+        // COSTRUZIONE CLASSIFICA GENERALE CON OVERLORD E GIOCHI
         window.buildLeaderboards = function() {
             const container = document.getElementById("leaderboardScoresContainer");
             if (!container) return;
@@ -1539,60 +1537,51 @@ window.addEventListener('message', (event) => {
                 checkLocalSession();
             }
         });
-        // Funzione centrale per aggregare i punteggi da tutti i minigiochi tramite localStorage
-function syncLocalGameScores() {
-    // Aggiungi qui le chiavi di tutti i tuoi giochi
-    const gameKeys = [
-        "points_masterwordle",
-        "points_colorclash", 
-        "points_lastspark",
-        "points_mastermurder",
-        "points_masterverbum",
-        "points_mastersudoku",
-        "points_masterkey",
-        "points_masterblock",
-        "points_mastertris",
-        "points_masterpassword",
-        "points_masterchess",
-        "points_masterblackjack"
-    ];
 
-    let totalGlobalPoints = 0;
+        function syncLocalGameScores() {
+            const gameKeys = [
+                "points_masterwordle",
+                "points_colorclash", 
+                "points_lastspark",
+                "points_mastermurder",
+                "points_masterverbum",
+                "points_mastersudoku",
+                "points_masterkey",
+                "points_masterblock",
+                "points_mastertris",
+                "points_masterpassword",
+                "points_masterchess",
+                "points_masterblackjack"
+            ];
 
-    gameKeys.forEach(key => {
-        const gamePoints = parseInt(localStorage.getItem(key)) || 0;
-        totalGlobalPoints += gamePoints;
-    });
+            let totalGlobalPoints = 0;
 
-    console.log("Punteggio totale sincronizzato:", totalGlobalPoints);
+            gameKeys.forEach(key => {
+                const gamePoints = parseInt(localStorage.getItem(key)) || 0;
+                totalGlobalPoints += gamePoints;
+            });
 
-    // AGGIORNA L'ELEMENTO VISIVO NELL'HUB (sostituisci "hub-points-display" con l'ID reale del tuo contatore punti nell'hub)
-    const pointsElement = document.getElementById("hub-points-display");
-    if (pointsElement) {
-        pointsElement.innerHTML = `🪙 ${totalGlobalPoints}`;
-    }
+            const pointsElement = document.getElementById("userXP");
+            if (pointsElement) {
+                pointsElement.innerHTML = totalGlobalPoints;
+            }
 
-    // Salva il totale aggregato
-    localStorage.setItem("global_total_points", totalGlobalPoints);
-}
+            localStorage.setItem("global_total_points", totalGlobalPoints);
+        }
 
-// 1. Sincronizza all'avvio dell'Hub
-window.addEventListener('load', () => {
-    syncLocalGameScores();
-});
+        window.addEventListener('load', () => {
+            syncLocalGameScores();
+        });
 
-// 2. Sincronizza automaticamente appena torni sulla scheda dell'Hub (senza ricaricare)
-window.addEventListener('focus', () => {
-    syncLocalGameScores();
-});
+        window.addEventListener('focus', () => {
+            syncLocalGameScores();
+        });
 
-// 3. Sincronizza in tempo reale se i dati cambiano da un'altra scheda
-window.addEventListener('storage', (event) => {
-    if (event.key && event.key.startsWith('points_')) {
-        syncLocalGameScores();
-    }
-});
-
+        window.addEventListener('storage', (event) => {
+            if (event.key && event.key.startsWith('points_')) {
+                syncLocalGameScores();
+            }
+        });
     </script>
 </body>
 </html>

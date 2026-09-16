@@ -1461,23 +1461,25 @@
         });
 
         function syncLocalGameScores() {
-            const wordlePoints = parseInt(localStorage.getItem("points_masterwordle")) || 0;
-            const wordleWins = parseInt(localStorage.getItem("wins_masterwordle")) || 0;
+    const wordlePoints = parseInt(localStorage.getItem("points_masterwordle")) || 0;
+    const wordleWins = parseInt(localStorage.getItem("wins_masterwordle")) || 0;
+    const sudokuPoints = parseInt(localStorage.getItem("points_mastersudoku")) || 0;
 
-            if (!userState.winsPerGame) userState.winsPerGame = {};
-            if (wordleWins > (userState.winsPerGame['Word Rush'] || 0)) {
-                userState.winsPerGame['Word Rush'] = wordleWins;
-            }
+    if (!userState.winsPerGame) userState.winsPerGame = {};
+    
+    if (wordleWins > (userState.winsPerGame['Word Rush'] || 0)) {
+        userState.winsPerGame['Word Rush'] = wordleWins;
+    }
 
-            if (wordlePoints > 0 && (!userState.syncedWordleXP || userState.syncedWordleXP < wordlePoints)) {
-                let diff = wordlePoints - (userState.syncedWordleXP || 0);
-                userState.xp = (userState.xp || 0) + diff;
-                userState.syncedWordleXP = wordlePoints;
-                saveState();
-            } else {
-                updateUI();
-            }
-        }
+    if (wordlePoints > 0 && (!userState.syncedWordleXP || userState.syncedWordleXP < wordlePoints)) {
+        let diff = wordlePoints - (userState.syncedWordleXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedWordleXP = wordlePoints;
+        saveState();
+    } else {
+        updateUI();
+    }
+}
 
         document.addEventListener('DOMContentLoaded', () => {
             syncLocalGameScores();

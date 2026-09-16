@@ -4,32 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO & META TAG AVANZATI -->
     <title>MasterSabba Arcade — Piattaforma Giochi & Hub Multigiocatore</title>
     <meta name="description" content="Esplora la collezione arcade di MasterSabba: giochi di carte, puzzle, logica e investigazione, accumula XP e scala la classifica globale.">
     <meta name="keywords" content="MasterSabba, Arcade, Web Games, PWA, Giochi online, Mini giochi, MasterLab">
     <meta name="author" content="MasterSabba">
 
-    <!-- PWA & MANIFEST -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#06080e">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- APPLE TOUCH & iOS CONFIGURATIONS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Sabba Arcade">
     <link rel="apple-touch-icon" href="MasterSabba Games.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="MasterSabba Games.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="MasterSabba Games.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="MasterSabba Games.png">
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Firebase SDK (Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -69,7 +61,6 @@
             flex-direction: column;
         }
 
-        /* NAVBAR */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -99,7 +90,6 @@
             object-fit: contain;
             border-radius: 6px;
         }
-        
 
         .highlight { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 243, 255, 0.6); }
 
@@ -131,7 +121,6 @@
 
         .hub-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: 0 0 12px rgba(0, 243, 255, 0.3); }
 
-        /* PALLINO ROSSO NOTIFICA SFIDE */
         .notification-badge {
             display: none;
             position: absolute;
@@ -176,7 +165,6 @@
 
         .btn-play:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(0, 243, 255, 0.6); }
 
-        /* HERO & SEARCH */
         .hero-section { text-align: center; padding: 2.5rem 1.5rem 1rem; }
         .hero-title {
           font-family: var(--font-heading);
@@ -208,7 +196,6 @@
         }
         .search-box:focus { border-color: var(--neon-cyan); box-shadow: var(--shadow-neon); }
 
-        /* TAB CATEGORIE */
         .category-tabs { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
 
         .tab-btn {
@@ -240,7 +227,6 @@
             gap: 0.5rem;
         }
 
-        /* MODALI SOVRAPPOSTE */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -283,7 +269,6 @@
         .modal-close { background: none; border: none; color: var(--text-dim); font-size: 1.4rem; cursor: pointer; }
         .modal-close:hover { color: var(--neon-pink); }
 
-        /* PROFILO UTENTE E AUTENTICAZIONE */
         .profile-input-group { margin-bottom: 1.2rem; text-align: center; }
         .profile-label { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.4rem; display: block; }
         .profile-input {
@@ -327,7 +312,6 @@
         }
         .badge.unlocked { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-        /* CLASSIFICA OVERLORD BOX & SCORING */
         .overlord-box {
             background: rgba(168, 17, 255, 0.15);
             border: 1px solid var(--neon-purple);
@@ -337,7 +321,6 @@
             margin-bottom: 15px;
         }
 
-        /* TIMER DISSOLVENZA SFIDE */
         .quest-timer-badge {
             background: rgba(0, 243, 255, 0.1);
             border: 1px solid var(--neon-cyan);
@@ -351,7 +334,6 @@
             display: block;
         }
 
-        /* SFIDE ITEM */
         .quest-item {
             background: rgba(255,255,255,0.03);
             border: var(--border-glass);
@@ -366,7 +348,6 @@
         .quest-info h4 { font-size: 0.95rem; color: #fff; }
         .quest-info p { font-size: 0.75rem; color: var(--neon-cyan); }
 
-        /* GRID GIOCHI */
         .main-container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 2.5rem; flex: 1; width: 100%; }
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.5rem; }
 
@@ -415,7 +396,6 @@
         .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
         .tag { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-heading); }
 
-        /* CHATBOT POTENZIATO */
         .chatbot-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
         .chatbot-toggle {
             background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
@@ -454,7 +434,6 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <header class="navbar">
         <div class="logo-container" onclick="openModal('infoModal')">
             <img src="MasterSabba Games.png" class="nav-logo-icon" alt="Logo">
@@ -472,7 +451,6 @@
         </div>
     </header>
 
-    <!-- HERO & SEARCH -->
     <section class="hero-section">
         <h1 class="hero-title">MASTER<span class="highlight">SABBA</span> ARCADE</h1>
         <p class="hero-subtitle">Seleziona un titolo, accumula XP e scala la classifica globale.</p>
@@ -491,7 +469,6 @@
         </div>
     </section>
 
-    <!-- MAIN GRID GIOCHI -->
     <main class="main-container">
         <h2 class="section-title">🕹️ Arcade Collection</h2>
         <div class="games-grid" id="gameList">
@@ -670,7 +647,6 @@
         </div>
     </main>
 
-    <!-- MODALE PROFILO CON AUTENTICAZIONE INTEGRATA NEL PROFILO -->
     <div id="profileModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
@@ -679,8 +655,6 @@
             </div>
             
             <div id="profiloContent">
-                
-                <!-- Schermata Autenticazione (Visibile se non loggato) -->
                 <div id="authSection">
                     <input type="email" id="email" placeholder="Email" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: var(--border-glass); border-radius: 8px; color: #fff; margin-bottom: 10px; outline: none;">
                     <input type="password" id="password" placeholder="Password" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border: var(--border-glass); border-radius: 8px; color: #fff; margin-bottom: 10px; outline: none;">
@@ -695,7 +669,6 @@
                     </p>
                 </div>
 
-                <!-- Schermata Utente Loggato (Visibile se loggato) -->
                 <div id="userSection" style="display: none;">
                     <div class="profile-input-group">
                         <span class="profile-label">Nome Utente</span>
@@ -749,7 +722,6 @@
         </div>
     </div>
 
-    <!-- MODALE CLASSIFICA AGGIORNATA CON OVERLORD E RIVALS -->
     <div id="leaderboardModal" class="modal-overlay">
         <div class="modal-card" style="max-height: 85vh; overflow-y: auto;">
             <div class="modal-header">
@@ -767,7 +739,6 @@
         </div>
     </div>
 
-    <!-- MODALE SFIDE PROCEDURALI CON TIMER E RISCATTO -->
     <div id="questModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
@@ -779,7 +750,6 @@
         </div>
     </div>
 
-    <!-- MODALE ANTEPRIMA GIOCO -->
     <div id="previewModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
@@ -798,7 +768,6 @@
         </div>
     </div>
 
-   <!-- MODALE INFO -->
     <div id="infoModal" class="modal-overlay">
         <div class="modal-card" style="text-align: center;">
             <div class="modal-header">
@@ -810,7 +779,6 @@
         </div>
     </div>
 
-    <!-- CHATBOT FUNZIONALE -->
     <div class="chatbot-container">
         <button class="chatbot-toggle" onclick="toggleChat()">💬</button>
         <div class="chatbot-window" id="chatWindow">
@@ -837,9 +805,7 @@
         <p>&copy; 2026 MasterSabba Arcade — Sviluppato da MasterSabba.</p>
     </footer>
 
-    <!-- LOGICA JAVASCRIPT & FIREBASE AUTH INTEGRATO -->
     <script>
-        // CONFIGURAZIONE FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyBxZQF5OO5-znaipaPYeFcjOARjFXO1_gc",
             authDomain: "mastersabba-games.firebaseapp.com",
@@ -864,11 +830,9 @@
                 db = firebase.database();
                 auth = firebase.auth();
                 isFirebaseActive = true;
-                console.log("Firebase DB & Auth Connessi!");
             }
         } catch(e) { console.warn("Firebase non ancora attivato, uso localStorage.", e); }
 
-        // DATI ANTEPRIMA
         const gameDataMap = {
             'color-clash': { title: 'ColorStorm', desc: 'Sfidalo a colpi di combinazioni cromatiche e riflessi fulminei in questo card game.', controls: 'Click o Touch sulle carte compatibili.', url: 'https://mastersabba.github.io/MasterUno/' },
             'last-spark': { title: 'Spark Bombs', desc: 'Un party game a turni ad alta tensione in cui ogni mossa può scatenare l\'esplosione finale.', controls: 'Click sul mazzo per pescare o usare azioni.', url: 'https://mastersabba.github.io/MasterKittens/' },
@@ -884,7 +848,6 @@
             'master-blackjack': { title: 'Cyber Deck', desc: 'Tavolo da gioco sperimentale nel MasterLab con chip animate e sfide di carte.', controls: 'Tasti Carta, Stai, Puntata.', url: '#' }
         };
 
-        // RIVALI PER LA CLASSIFICA (AGGIORNATI)
         window.globalRivals = {
             "Cyber Crime": [{n: "CyberGhost", s: 15}, {n: "SabbaFan99", s: 10}, {n: "Rex_Logic", s: 5}],
             "Word Duel": [{n: "WordHacker", s: 20}, {n: "CyberGhost", s: 12}, {n: "Alpha_User", s: 6}],
@@ -900,28 +863,13 @@
             "Cyber Deck": [{n: "DealerPro", s: 25}, {n: "LuckySabba", s: 15}, {n: "AceHigh", s: 10}]
         };
 
-        // Ascoltatore per i messaggi in arrivo dai minigiochi (tramite iframe)
-        window.addEventListener('message', (event) => {
-            if (event.data && event.data.type === 'GAME_WIN') {
-                const gameKey = event.data.gameKey;
-                console.log("Vittoria ricevuta dal gioco tramite postMessage:", gameKey);
-                
-                if (typeof triggerGameWin === 'function') {
-                    triggerGameWin(gameKey);
-                } else {
-                    console.error("La funzione triggerGameWin non è definita nell'hub.");
-                }
-            }
-        });
-
         window.hubCurrentUser = null;
-        window.hubCachedScores = {};
 
-        // STATO UTENTE
         const defaultState = {
             username: "Ospite",
             avatar: "⚡",
             xp: 0,
+            syncedWordleXP: 0,
             gamesPlayed: 0,
             ratings: {},
             achievements: { firstVote: false, firstPlay: false, labTester: false, customProfile: false },
@@ -931,7 +879,6 @@
 
         let userState = JSON.parse(localStorage.getItem('mastersabba_arcade_v2')) || defaultState;
 
-        // GENERATORE SFIDE PROCEDURALI
         function generateProceduralQuests(currentState) {
             const lvl = Math.floor((currentState.xp || 0) / 300) + 1;
             const targetWins = Math.max(1, lvl);
@@ -943,33 +890,29 @@
                     id: `q_win_lvl_${lvl}`,
                     title: `🏆 Trionfo Arcade: Ottieni ${targetWins} vittorie`,
                     reward: 50 * lvl,
-                    check: (s) => {
-                        let totalWins = Object.values(s.winsPerGame || {}).reduce((a, b) => a + b, 0);
-                        return totalWins >= targetWins;
-                    }
+                    target: targetWins
                 },
                 {
                     id: `q_vote_lvl_${lvl}`,
                     title: `⭐ Critico Arcade: Vota ${targetVotes} giochi`,
                     reward: 50 * lvl,
-                    check: (s) => Object.keys(s.ratings || {}).length >= targetVotes
+                    target: targetVotes
                 },
                 {
                     id: `q_xp_lvl_${lvl}`,
                     title: `⚡ Traguardo XP: Raggiungi ${targetXP} XP totali`,
                     reward: 60 * lvl,
-                    check: (s) => (s.xp || 0) >= targetXP
+                    target: targetXP
                 },
                 {
                     id: `q_lab_lvl_${lvl}`,
                     title: `🧪 Innovatore: Prova il MasterLab`,
                     reward: 80 * lvl,
-                    check: (s) => !!(s.achievements && s.achievements.labTester)
+                    target: 1
                 }
             ];
         }
 
-        // SISTEMA PUNTEGGIO: I PUNTI VENGONO ASSEGNATI SOLO IN CASO DI VITTORIA
         function registerWin(gameKey, pointsAwarded = 50) {
             if (!userState.winsPerGame) userState.winsPerGame = {};
             userState.winsPerGame[gameKey] = (userState.winsPerGame[gameKey] || 0) + 1;
@@ -979,7 +922,6 @@
             buildLeaderboards();
         }
 
-        // GESTIONE RESET GIORNALIERO E SFIDE
         const STORAGE_KEY_QUESTS = 'mastersabba_quests_data';
 
         function getOrUpdateDailyQuests(currentState) {
@@ -1028,7 +970,6 @@
             resetTimerInterval = setInterval(updateTimer, 1000);
         }
 
-        // RISCATTO MANUALE DELLA SFIDA
         function claimQuestReward(questId) {
             let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY_QUESTS));
             if (!savedData) return;
@@ -1047,7 +988,6 @@
             }
         }
 
-        // AUTENTICAZIONE E PROFILO
         function toggleAuthMode() {
             isRegistering = !isRegistering;
             const usernameInput = document.getElementById('username');
@@ -1188,7 +1128,6 @@
             }
         }
 
-        // CLOUD SYNC & LOCALSTORAGE
         function saveState() {
             localStorage.setItem('mastersabba_arcade_v2', JSON.stringify(userState));
             if (isFirebaseActive && currentUser) {
@@ -1207,7 +1146,7 @@
                 opt.classList.toggle('selected', opt.textContent === userState.avatar);
             });
 
-            const xp = userState.xp;
+            const xp = userState.xp || 0;
             const level = Math.floor(xp / 300) + 1;
             const currentLevelXP = xp % 300;
             const fillPct = (currentLevelXP / 300) * 100;
@@ -1220,13 +1159,13 @@
             document.getElementById('userLevel').textContent = level;
             document.getElementById('userRank').textContent = rank;
             document.getElementById('userXP').textContent = xp;
-            document.getElementById('gamesPlayedCount').textContent = userState.gamesPlayed;
+            document.getElementById('gamesPlayedCount').textContent = userState.gamesPlayed || 0;
             document.getElementById('xpBarFill').style.width = fillPct + '%';
 
-            if (userState.achievements.firstVote) document.getElementById('badge-first-vote').classList.add('unlocked');
-            if (userState.achievements.firstPlay) document.getElementById('badge-first-play').classList.add('unlocked');
-            if (userState.achievements.labTester) document.getElementById('badge-lab-tester').classList.add('unlocked');
-            if (userState.achievements.customProfile) document.getElementById('badge-custom-profile').classList.add('unlocked');
+            if (userState.achievements?.firstVote) document.getElementById('badge-first-vote').classList.add('unlocked');
+            if (userState.achievements?.firstPlay) document.getElementById('badge-first-play').classList.add('unlocked');
+            if (userState.achievements?.labTester) document.getElementById('badge-lab-tester').classList.add('unlocked');
+            if (userState.achievements?.customProfile) document.getElementById('badge-custom-profile').classList.add('unlocked');
 
             Object.keys(userState.ratings || {}).forEach(gameId => {
                 const val = userState.ratings[gameId];
@@ -1240,7 +1179,6 @@
             buildLeaderboards();
         }
 
-        // Rende le sfide verificando i progressi reali con supporto sicuro per i contatori utente
         function renderQuests() {
             const container = document.getElementById('questContainer');
             if (!container) return;
@@ -1268,10 +1206,8 @@
                 } else if (titleLower.includes('xp') || titleLower.includes('traguardo')) {
                     const xp = userState.xp || 0;
                     isConditionMet = xp >= (q.target || 300);
-                } else if (titleLower.includes('masterlab') || titleLower.includes('master lab') || titleLower.includes('prova')) {
-                    isConditionMet = !!(userState.visitedMasterLab || userState.masterLabTested || true);
-                } else {
-                    isConditionMet = q.progress !== undefined && q.target !== undefined ? q.progress >= q.target : false;
+                } else if (titleLower.includes('masterlab') || titleLower.includes('lab') || titleLower.includes('prova')) {
+                    isConditionMet = !!(userState.achievements && userState.achievements.labTester);
                 }
                     
                 const canClaim = isConditionMet && !isCompleted;
@@ -1296,7 +1232,6 @@
             if (dot) dot.style.display = hasClaimableQuests ? 'block' : 'none';
         }
 
-        // COSTRUZIONE CLASSIFICA GENERALE CON OVERLORD E GIOCHI
         window.buildLeaderboards = function() {
             const container = document.getElementById("leaderboardScoresContainer");
             if (!container) return;
@@ -1306,15 +1241,15 @@
             Object.values(window.globalRivals).forEach(list => list.forEach(p => totalAggregatedScores[p.n] = (totalAggregatedScores[p.n] || 0) + p.s));
             
             if (userState.username && userState.username !== "Ospite") {
-                let userSum = 0;
-                Object.values(userState.winsPerGame || {}).forEach(w => userSum += (w * 10));
-                userSum += (userState.xp || 0);
-                totalAggregatedScores[userState.username] = userSum;
+                totalAggregatedScores[userState.username] = userState.xp || 0;
             }
 
             let absoluteWinner = "Nessuno", maxOverallScore = -1;
             Object.keys(totalAggregatedScores).forEach(name => {
-                if (totalAggregatedScores[name] > maxOverallScore) { maxOverallScore = totalAggregatedScores[name]; absoluteWinner = name; }
+                if (totalAggregatedScores[name] > maxOverallScore) { 
+                    maxOverallScore = totalAggregatedScores[name]; 
+                    absoluteWinner = name; 
+                }
             });
             
             const overlordNameEl = document.getElementById("globalOverlordName");
@@ -1323,10 +1258,15 @@
             if(overlordScoreEl) overlordScoreEl.textContent = `${maxOverallScore} Punti Totali`;
 
             Object.keys(window.globalRivals).forEach(game => {
-                let structure = [...window.globalRivals[game]];
+                let structure = JSON.parse(JSON.stringify(window.globalRivals[game]));
                 let userGameWins = userState.winsPerGame?.[game] || 0;
                 let userScore = userGameWins * 10;
-                
+
+                if (game === "Word Rush") {
+                    const wordlePts = parseInt(localStorage.getItem("points_masterwordle")) || 0;
+                    userScore = Math.max(userScore, wordlePts);
+                }
+
                 if (userState.username && userState.username !== "Ospite") {
                     let idx = structure.findIndex(item => item.n.toLowerCase() === userState.username.toLowerCase());
                     if (idx !== -1) { 
@@ -1353,7 +1293,7 @@
         };
 
         window.openLeaderboard = () => { 
-            window.buildLeaderboards(); 
+            syncLocalGameScores();
             openModal('leaderboardModal'); 
         };
 
@@ -1377,6 +1317,8 @@
             if (confirm("Vuoi resettare i tuoi progressi locali?")) {
                 localStorage.removeItem('mastersabba_arcade_v2');
                 localStorage.removeItem(STORAGE_KEY_QUESTS);
+                localStorage.removeItem('points_masterwordle');
+                localStorage.removeItem('wins_masterwordle');
                 userState = {...defaultState};
                 window.hubCurrentUser = null;
                 saveState();
@@ -1405,7 +1347,7 @@
 
         function registerPlay(event, gameId) {
             event.stopPropagation();
-            userState.gamesPlayed++;
+            userState.gamesPlayed = (userState.gamesPlayed || 0) + 1;
             userState.achievements.firstPlay = true;
             
             if (gameId === 'master-blackjack') {
@@ -1415,7 +1357,7 @@
             saveState();
         }
 
-        window.triggerGameWin = function(gameKey) {
+        window.triggerGameWin = function(gameKey, bonusPoints) {
             let gameNameMap = {
                 'color-clash': 'ColorStorm',
                 'last-spark': 'Spark Bombs',
@@ -1432,7 +1374,7 @@
             };
 
             let mappedName = gameNameMap[gameKey] || gameKey;
-            let points = (gameKey === 'master-blackjack') ? 100 : 50;
+            let points = bonusPoints || ((gameKey === 'master-blackjack') ? 100 : 50);
 
             registerWin(mappedName, points);
         };
@@ -1468,7 +1410,6 @@
             });
         }
 
-        // CHATBOT INTERATTIVO
         function toggleChat() {
             const chat = document.getElementById('chatWindow');
             chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
@@ -1509,20 +1450,37 @@
             }, 350);
         }
 
-        // Ascolta i messaggi inviati dai singoli giochi quando il giocatore vince
         window.addEventListener('message', function(event) {
             if (event.data && event.data.type === 'GAME_WIN') {
                 const gameKey = event.data.gameKey;
+                const points = event.data.points;
                 if (gameKey) {
-                    console.log("Vittoria registrata per:", gameKey);
-                    triggerGameWin(gameKey);
+                    triggerGameWin(gameKey, points);
                 }
             }
         });
 
-        // INITIALIZATION
+        function syncLocalGameScores() {
+            const wordlePoints = parseInt(localStorage.getItem("points_masterwordle")) || 0;
+            const wordleWins = parseInt(localStorage.getItem("wins_masterwordle")) || 0;
+
+            if (!userState.winsPerGame) userState.winsPerGame = {};
+            if (wordleWins > (userState.winsPerGame['Word Rush'] || 0)) {
+                userState.winsPerGame['Word Rush'] = wordleWins;
+            }
+
+            if (wordlePoints > 0 && (!userState.syncedWordleXP || userState.syncedWordleXP < wordlePoints)) {
+                let diff = wordlePoints - (userState.syncedWordleXP || 0);
+                userState.xp = (userState.xp || 0) + diff;
+                userState.syncedWordleXP = wordlePoints;
+                saveState();
+            } else {
+                updateUI();
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            updateUI();
+            syncLocalGameScores();
             
             if (isFirebaseActive && auth) {
                 auth.onAuthStateChanged((user) => {
@@ -1538,47 +1496,12 @@
             }
         });
 
-        function syncLocalGameScores() {
-            const gameKeys = [
-                "points_masterwordle",
-                "points_colorclash", 
-                "points_lastspark",
-                "points_mastermurder",
-                "points_masterverbum",
-                "points_mastersudoku",
-                "points_masterkey",
-                "points_masterblock",
-                "points_mastertris",
-                "points_masterpassword",
-                "points_masterchess",
-                "points_masterblackjack"
-            ];
-
-            let totalGlobalPoints = 0;
-
-            gameKeys.forEach(key => {
-                const gamePoints = parseInt(localStorage.getItem(key)) || 0;
-                totalGlobalPoints += gamePoints;
-            });
-
-            const pointsElement = document.getElementById("userXP");
-            if (pointsElement) {
-                pointsElement.innerHTML = totalGlobalPoints;
-            }
-
-            localStorage.setItem("global_total_points", totalGlobalPoints);
-        }
-
-        window.addEventListener('load', () => {
-            syncLocalGameScores();
-        });
-
         window.addEventListener('focus', () => {
             syncLocalGameScores();
         });
 
         window.addEventListener('storage', (event) => {
-            if (event.key && event.key.startsWith('points_')) {
+            if (event.key && (event.key.startsWith('points_') || event.key.startsWith('wins_'))) {
                 syncLocalGameScores();
             }
         });

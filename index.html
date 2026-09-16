@@ -899,6 +899,23 @@
             "Royal Chess": [{n: "DeepNeon", s: 12}, {n: "Rex_Logic", s: 8}, {n: "Alpha_User", s: 4}],
             "Cyber Deck": [{n: "DealerPro", s: 25}, {n: "LuckySabba", s: 15}, {n: "AceHigh", s: 10}]
         };
+
+        // Ascoltatore per i messaggi in arrivo dai minigiochi (tramite iframe)
+window.addEventListener('message', (event) => {
+    // Verifica che il messaggio contenga i dati di vittoria del gioco
+    if (event.data && event.data.type === 'GAME_WIN') {
+        const gameKey = event.data.gameKey;
+        console.log("Vittoria ricevuta dal gioco tramite postMessage:", gameKey);
+        
+        // Esegue la funzione dell'hub per aggiornare punti e classifiche
+        if (typeof triggerGameWin === 'function') {
+            triggerGameWin(gameKey);
+        } else {
+            console.error("La funzione triggerGameWin non è definita nell'hub.");
+        }
+    }
+});
+
         window.hubCurrentUser = null;
         window.hubCachedScores = {};
 

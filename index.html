@@ -884,7 +884,7 @@
             'master-blackjack': { title: 'Cyber Deck', desc: 'Tavolo da gioco sperimentale nel MasterLab con chip animate e sfide di carte.', controls: 'Tasti Carta, Stai, Puntata.', url: '#' }
         };
 
-        // RIVALI PER LA CLASSIFICA
+        // RIVALI PER LA CLASSIFICA (AGGIORNATI)
         window.globalRivals = {
             "Cyber Crime": [{n: "CyberGhost", s: 15}, {n: "SabbaFan99", s: 10}, {n: "Rex_Logic", s: 5}],
             "Word Duel": [{n: "WordHacker", s: 20}, {n: "CyberGhost", s: 12}, {n: "Alpha_User", s: 6}],
@@ -1281,7 +1281,7 @@
             if (dot) dot.style.display = hasClaimableQuests ? 'block' : 'none';
         }
 
-        // COSTRUZIONE CLASSIFICA GENERALE CON OVERLORD E GIOCHI
+        // COSTRUZIONE CLASSIFICA GENERALE CON OVERLORD E GIOCHI (PARTE AGGIORNATA)
         window.buildLeaderboards = function() {
             const container = document.getElementById("leaderboardScoresContainer");
             if (!container) return;
@@ -1493,16 +1493,17 @@
                 messages.scrollTop = messages.scrollHeight;
             }, 350);
         }
-// Ascolta i messaggi inviati dai singoli giochi quando il giocatore vince
-window.addEventListener('message', function(event) {
-    if (event.data && event.data.type === 'GAME_WIN') {
-        const gameKey = event.data.gameKey;
-        if (gameKey) {
-            console.log("Vittoria registrata per:", gameKey);
-            triggerGameWin(gameKey); // Incrementa le vittorie e aggiunge i punti XP
-        }
-    }
-});
+
+        // Ascolta i messaggi inviati dai singoli giochi quando il giocatore vince
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'GAME_WIN') {
+                const gameKey = event.data.gameKey;
+                if (gameKey) {
+                    console.log("Vittoria registrata per:", gameKey);
+                    triggerGameWin(gameKey);
+                }
+            }
+        });
 
         // INITIALIZATION
         document.addEventListener('DOMContentLoaded', () => {

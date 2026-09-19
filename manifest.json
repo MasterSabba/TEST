@@ -1,6 +1,6 @@
 {
   "name": "MasterSabba Arcade",
-  "short_name": "SabbaArcade",
+  "short_name": "MasterSabba Arcade",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#06080e",

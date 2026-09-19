@@ -1272,6 +1272,11 @@
                     userScore = Math.max(userScore, sudokuPts);
                 }
 
+                 if (game === "Spark Bombs") {
+                    const kittensPts = parseInt(localStorage.getItem("points_masterkittens")) || 0;
+                    userScore = Math.max(userScore, kittensPts);
+                }
+
                 if (userState.username && userState.username !== "Ospite") {
                     let idx = structure.findIndex(item => item.n.toLowerCase() === userState.username.toLowerCase());
                     if (idx !== -1) { 
@@ -1473,6 +1478,10 @@ function syncLocalGameScores() {
     const sudokuPoints = parseInt(localStorage.getItem("points_mastersudoku")) || 0;
     const sudokuWins = parseInt(localStorage.getItem("wins_mastersudoku")) || 0;
 
+    // Sincronizzazione Master kittens
+    const kittensPoints = parseInt(localStorage.getItem("points_masterkittens")) || 0;
+    const kittensWins = parseInt(localStorage.getItem("wins_masterkittens")) || 0;
+
     if (!userState.winsPerGame) userState.winsPerGame = {};
     
     // Sincronizza le vittorie in classifica
@@ -1483,11 +1492,23 @@ function syncLocalGameScores() {
         userState.winsPerGame['Digit Logic'] = sudokuWins;
     }
 
+    if (kittensWins > (userState.winsPerGame['Spark Bombs'] || 0)) {
+        userState.winsPerGame['Spark Bombs'] = kittensWins;
+    }
+
     // Sincronizza i punti XP di Wordle
     if (wordlePoints > 0 && (!userState.syncedWordleXP || userState.syncedWordleXP < wordlePoints)) {
         let diff = wordlePoints - (userState.syncedWordleXP || 0);
         userState.xp = (userState.xp || 0) + diff;
         userState.syncedWordleXP = wordlePoints;
+        saveState();
+    } 
+
+    // Sincronizza i punti XP di kittens
+    if (kittensPoints > 0 && (!userState.syncedKittensXP || userState.syncedKittensXP < kittensPoints)) {
+        let diff = kittensPoints - (userState.syncedKittensXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedKittensXP = kittensPoints;
         saveState();
     } 
     

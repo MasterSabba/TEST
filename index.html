@@ -1544,16 +1544,52 @@
         }
 
         function resetStats() {
-            if (confirm("Vuoi resettare i tuoi progressi locali?")) {
-                localStorage.removeItem('mastersabba_arcade_v2');
-                localStorage.removeItem(STORAGE_KEY_QUESTS);
-                localStorage.removeItem('points_masterwordle');
-                localStorage.removeItem('wins_masterwordle');
-                userState = {...defaultState};
-                window.hubCurrentUser = null;
-                saveState();
-            }
-        }
+    if (confirm("Vuoi resettare i tuoi progressi locali?")) {
+        localStorage.removeItem('mastersabba_arcade_v2');
+        localStorage.removeItem(STORAGE_KEY_QUESTS);
+        
+        // Reset punti e vittorie per ogni gioco
+        localStorage.removeItem('points_masterwordle');
+        localStorage.removeItem('wins_masterwordle');
+
+        localStorage.removeItem('points_mastersudoku');
+        localStorage.removeItem('wins_mastersudoku');
+
+        localStorage.removeItem('points_masterkittens');
+        localStorage.removeItem('wins_masterkittens');
+
+        localStorage.removeItem('points_masteruno');
+        localStorage.removeItem('wins_masteruno');
+
+        localStorage.removeItem('points_mastermurder');
+        localStorage.removeItem('wins_mastermurder');
+
+        localStorage.removeItem('points_masterverbum');
+        localStorage.removeItem('wins_masterverbum');
+
+        localStorage.removeItem('points_masterkey');
+        localStorage.removeItem('wins_masterkey');
+
+        localStorage.removeItem('points_masterblock');
+        localStorage.removeItem('wins_masterblock');
+
+        localStorage.removeItem('points_mastertris');
+        localStorage.removeItem('wins_mastertris');
+
+        localStorage.removeItem('points_masterpassword');
+        localStorage.removeItem('wins_masterpassword');
+
+        localStorage.removeItem('points_masterchess');
+        localStorage.removeItem('wins_masterchess');
+
+        localStorage.removeItem('points_masterblackjack');
+        localStorage.removeItem('wins_masterblackjack');
+        
+        userState = {...defaultState};
+        window.hubCurrentUser = null;
+        saveState();
+    }
+}
 
         function openGamePreview(gameId) {
             const data = gameDataMap[gameId];

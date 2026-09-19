@@ -472,10 +472,10 @@
     <main class="main-container">
         <h2 class="section-title">🕹️ Arcade Collection</h2>
         <div class="games-grid" id="gameList">
-            <article class="game-card" data-id="color-clash" data-category="carte" data-name="colorstorm color clash masteruno uno carte" onclick="openGamePreview('color-clash')">
+            <article class="game-card" data-id="color-clash" data-category="carte" data-name="color storm color clash masteruno uno carte" onclick="openGamePreview('color-clash')">
                 <div class="card-media uno-bg">🎴</div>
                 <div class="card-content">
-                    <h3>ColorStorm</h3>
+                    <h3>Color Storm</h3>
                     <p>Sfidalo a colpi di combinazioni cromatiche e riflessi fulminei in questo card game.</p>
                     <div class="star-rating" onclick="rateGame(event, 'color-clash')">
                         <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
@@ -834,7 +834,7 @@
         } catch(e) { console.warn("Firebase non ancora attivato, uso localStorage.", e); }
 
         const gameDataMap = {
-            'color-clash': { title: 'ColorStorm', desc: 'Sfidalo a colpi di combinazioni cromatiche e riflessi fulminei in questo card game.', controls: 'Click o Touch sulle carte compatibili.', url: 'https://mastersabba.github.io/MasterUno/' },
+            'color-clash': { title: 'Color Storm', desc: 'Sfidalo a colpi di combinazioni cromatiche e riflessi fulminei in questo card game.', controls: 'Click o Touch sulle carte compatibili.', url: 'https://mastersabba.github.io/MasterUno/' },
             'last-spark': { title: 'Spark Bombs', desc: 'Un party game a turni ad alta tensione in cui ogni mossa può scatenare l\'esplosione finale.', controls: 'Click sul mazzo per pescare o usare azioni.', url: 'https://mastersabba.github.io/MasterKittens/' },
             'master-wordle': { title: 'Word Rush', desc: 'Metti alla prova il tuo vocabolario decifrando la parola nascosta in soli sei tentativi.', controls: 'Tastiera fisica o touch.', url: 'https://mastersabba.github.io/MasterWordle/' },
             'master-murder': { title: 'Cyber Crime', desc: 'Vesti i panni del detective cibernetico analizzando indizi digitali e interrogando i sospettati.', controls: 'Click su oggetti ed elementi di dialogo.', url: 'https://mastersabba.github.io/MasterMurder/' },
@@ -855,7 +855,7 @@
             "Key Speed": [{n: "CryptoKing", s: 14}, {n: "Matrix9", s: 9}, {n: "CyberGhost", s: 3}],
             "Word Rush": [{n: "WordHacker", s: 16}, {n: "SabbaFan99", s: 10}, {n: "CryptoKing", s: 5}],
             "Spark Bombs": [{n: "ExplodeMe", s: 3}, {n: "Alpha_User", s: 2}, {n: "Matrix9", s: 1}],
-            "ColorStorm": [{n: "CardShark", s: 4}, {n: "CyberGhost", s: 2}, {n: "ExplodeMe", s: 1}],
+            "Color Storm": [{n: "CardShark", s: 4}, {n: "CyberGhost", s: 2}, {n: "ExplodeMe", s: 1}],
             "Tetra Block": [{n: "TetrisGod", s: 50}, {n: "Matrix9", s: 30}, {n: "Rex_Logic", s: 15}],
             "Tris Battle": [{n: "Alpha_User", s: 5}, {n: "CardShark", s: 3}, {n: "SabbaFan99", s: 1}],
             "Code Breaker": [{n: "CryptoKing", s: 8}, {n: "CyberGhost", s: 5}, {n: "WordHacker", s: 2}],
@@ -1277,6 +1277,51 @@
                     userScore = Math.max(userScore, kittensPts);
                 }
 
+                if (game === "Color Storm") {
+                    const unoPts = parseInt(localStorage.getItem("points_masteruno")) || 0;
+                    userScore = Math.max(userScore, unoPts);
+                }
+
+                if (game === "Cyber Crime") {
+                    const murderPts = parseInt(localStorage.getItem("points_mastermurder")) || 0;
+                    userScore = Math.max(userScore, murderPts);
+                }
+
+                if (game === "Word Duel") {
+                    const verbumPts = parseInt(localStorage.getItem("points_masterverbum")) || 0;
+                    userScore = Math.max(userScore, verbumPts);
+                }
+
+                if (game === "Key Speed") {
+                    const keyPts = parseInt(localStorage.getItem("points_masterkey")) || 0;
+                    userScore = Math.max(userScore, keyPts);
+                }
+
+                if (game === "Tetra Block") {
+                    const blockPts = parseInt(localStorage.getItem("points_masterblock")) || 0;
+                    userScore = Math.max(userScore, blockPts);
+                }
+
+                if (game === "Tris Battle") {
+                    const trisPts = parseInt(localStorage.getItem("points_mastertris")) || 0;
+                    userScore = Math.max(userScore, trisPts);
+                }
+
+                if (game === "Code Breaker") {
+                    const passwordPts = parseInt(localStorage.getItem("points_masterpassword")) || 0;
+                    userScore = Math.max(userScore, passwordPts);
+                }
+
+                if (game === "Royal Chess") {
+                    const chessPts = parseInt(localStorage.getItem("points_masterchess")) || 0;
+                    userScore = Math.max(userScore, chessPts);
+                }
+
+                if (game === "Cyber Deck") {
+                    const blackjackPts = parseInt(localStorage.getItem("points_masterblackjack")) || 0;
+                    userScore = Math.max(userScore, blackjackPts);
+                }
+
                 if (userState.username && userState.username !== "Ospite") {
                     let idx = structure.findIndex(item => item.n.toLowerCase() === userState.username.toLowerCase());
                     if (idx !== -1) { 
@@ -1369,7 +1414,7 @@
 
         window.triggerGameWin = function(gameKey, bonusPoints) {
             let gameNameMap = {
-                'color-clash': 'ColorStorm',
+                'color-clash': 'Color Storm',
                 'last-spark': 'Spark Bombs',
                 'master-wordle': 'Word Rush',
                 'master-murder': 'Cyber Crime',
@@ -1451,7 +1496,7 @@
                 } else if (lower.includes('xp') || lower.includes('accumulo')) {
                     reply = "I punti vengono assegnati in caso di vittoria nei giochi, votando le stelle, testando il MasterLab e riscattando le Sfide!";
                 } else if (lower.includes('consiglio') || lower.includes('gioco')) {
-                    const games = ['ColorStorm', 'Spark Bombs', 'Word Rush', 'Cyber Crime', 'Royal Chess'];
+                    const games = ['Color Storm', 'Spark Bombs', 'Word Rush', 'Cyber Crime', 'Royal Chess'];
                     reply = `Ti consiglio di provare subito **${games[Math.floor(Math.random()*games.length)]}** e conquistare la vittoria!`;
                 }
 
@@ -1473,28 +1518,55 @@
 function syncLocalGameScores() {
     const wordlePoints = parseInt(localStorage.getItem("points_masterwordle")) || 0;
     const wordleWins = parseInt(localStorage.getItem("wins_masterwordle")) || 0;
-    
-    // Sincronizzazione Master Sudoku
+
     const sudokuPoints = parseInt(localStorage.getItem("points_mastersudoku")) || 0;
     const sudokuWins = parseInt(localStorage.getItem("wins_mastersudoku")) || 0;
 
-    // Sincronizzazione Master kittens
     const kittensPoints = parseInt(localStorage.getItem("points_masterkittens")) || 0;
     const kittensWins = parseInt(localStorage.getItem("wins_masterkittens")) || 0;
 
-    if (!userState.winsPerGame) userState.winsPerGame = {};
-    
-    // Sincronizza le vittorie in classifica
-    if (wordleWins > (userState.winsPerGame['Word Rush'] || 0)) {
-        userState.winsPerGame['Word Rush'] = wordleWins;
-    }
-    if (sudokuWins > (userState.winsPerGame['Digit Logic'] || 0)) {
-        userState.winsPerGame['Digit Logic'] = sudokuWins;
-    }
+    const unoPoints = parseInt(localStorage.getItem("points_masteruno")) || 0;
+    const unoWins = parseInt(localStorage.getItem("wins_masteruno")) || 0;
 
-    if (kittensWins > (userState.winsPerGame['Spark Bombs'] || 0)) {
-        userState.winsPerGame['Spark Bombs'] = kittensWins;
-    }
+    const murderPoints = parseInt(localStorage.getItem("points_mastermurder")) || 0;
+    const murderWins = parseInt(localStorage.getItem("wins_mastermurder")) || 0;
+
+    const verbumPoints = parseInt(localStorage.getItem("points_masterverbum")) || 0;
+    const verbumWins = parseInt(localStorage.getItem("wins_masterverbum")) || 0;
+
+    const keyPoints = parseInt(localStorage.getItem("points_masterkey")) || 0;
+    const keyWins = parseInt(localStorage.getItem("wins_masterkey")) || 0;
+
+    const blockPoints = parseInt(localStorage.getItem("points_masterblock")) || 0;
+    const blockWins = parseInt(localStorage.getItem("wins_masterblock")) || 0;
+
+    const trisPoints = parseInt(localStorage.getItem("points_mastertris")) || 0;
+    const trisWins = parseInt(localStorage.getItem("wins_mastertris")) || 0;
+
+    const passwordPoints = parseInt(localStorage.getItem("points_masterpassword")) || 0;
+    const passwordWins = parseInt(localStorage.getItem("wins_masterpassword")) || 0;
+
+    const chessPoints = parseInt(localStorage.getItem("points_masterchess")) || 0;
+    const chessWins = parseInt(localStorage.getItem("wins_masterchess")) || 0;
+
+    const blackjackPoints = parseInt(localStorage.getItem("points_masterblackjack")) || 0;
+    const blackjackWins = parseInt(localStorage.getItem("wins_masterblackjack")) || 0;
+
+    if (!userState.winsPerGame) userState.winsPerGame = {};
+
+    // Sincronizza le vittorie in classifica per ogni gioco
+    if (wordleWins > (userState.winsPerGame['Word Rush'] || 0)) userState.winsPerGame['Word Rush'] = wordleWins;
+    if (sudokuWins > (userState.winsPerGame['Digit Logic'] || 0)) userState.winsPerGame['Digit Logic'] = sudokuWins;
+    if (kittensWins > (userState.winsPerGame['Spark Bombs'] || 0)) userState.winsPerGame['Spark Bombs'] = kittensWins;
+    if (unoWins > (userState.winsPerGame['Color Storm'] || 0)) userState.winsPerGame['Color Storm'] = unoWins;
+    if (murderWins > (userState.winsPerGame['Cyber Crime'] || 0)) userState.winsPerGame['Cyber Crime'] = murderWins;
+    if (verbumWins > (userState.winsPerGame['Word Duel'] || 0)) userState.winsPerGame['Word Duel'] = verbumWins;
+    if (keyWins > (userState.winsPerGame['Key Speed'] || 0)) userState.winsPerGame['Key Speed'] = keyWins;
+    if (blockWins > (userState.winsPerGame['Tetra Block'] || 0)) userState.winsPerGame['Tetra Block'] = blockWins;
+    if (trisWins > (userState.winsPerGame['Tris Battle'] || 0)) userState.winsPerGame['Tris Battle'] = trisWins;
+    if (passwordWins > (userState.winsPerGame['Code Breaker'] || 0)) userState.winsPerGame['Code Breaker'] = passwordWins;
+    if (chessWins > (userState.winsPerGame['Royal Chess'] || 0)) userState.winsPerGame['Royal Chess'] = chessWins;
+    if (blackjackWins > (userState.winsPerGame['Cyber Deck'] || 0)) userState.winsPerGame['Cyber Deck'] = blackjackWins;
 
     // Sincronizza i punti XP di Wordle
     if (wordlePoints > 0 && (!userState.syncedWordleXP || userState.syncedWordleXP < wordlePoints)) {
@@ -1511,6 +1583,78 @@ function syncLocalGameScores() {
         userState.syncedKittensXP = kittensPoints;
         saveState();
     } 
+    
+    // Sincronizza i punti XP di Color Storm (Master Uno)
+    if (unoPoints > 0 && (!userState.syncedUnoXP || userState.syncedUnoXP < unoPoints)) {
+        let diff = unoPoints - (userState.syncedUnoXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedUnoXP = unoPoints;
+        saveState();
+    }
+
+    // Sincronizza i punti XP di Cyber Crime (Master Murder)
+    if (murderPoints > 0 && (!userState.syncedMurderXP || userState.syncedMurderXP < murderPoints)) {
+        let diff = murderPoints - (userState.syncedMurderXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedMurderXP = murderPoints;
+        saveState();
+    }
+
+    // Sincronizza i punti XP di Word Duel (Master Verbum)
+    if (verbumPoints > 0 && (!userState.syncedVerbumXP || userState.syncedVerbumXP < verbumPoints)) {
+        let diff = verbumPoints - (userState.syncedVerbumXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedVerbumXP = verbumPoints;
+        saveState();
+    }
+
+    // Sincronizza i punti XP di Key Speed (Master Key)
+    if (keyPoints > 0 && (!userState.syncedKeyXP || userState.syncedKeyXP < keyPoints)) {
+        let diff = keyPoints - (userState.syncedKeyXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedKeyXP = keyPoints;
+        saveState();
+    }
+
+    // Sincronizza i punti XP di Tetra Block (Master Block)
+    if (blockPoints > 0 && (!userState.syncedBlockXP || userState.syncedBlockXP < blockPoints)) {
+        let diff = blockPoints - (userState.syncedBlockXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedBlockXP = blockPoints;
+        saveState();
+    }
+
+    // Sincronizza i punti XP di Tris Battle (Master Tris)
+    if (trisPoints > 0 && (!userState.syncedTrisXP || userState.syncedTrisXP < trisPoints)) {
+        let diff = trisPoints - (userState.syncedTrisXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedTrisXP = trisPoints;
+        saveState();
+    }
+
+    // Sincronizza i punti XP di Code Breaker (Master Password)
+    if (passwordPoints > 0 && (!userState.syncedPasswordXP || userState.syncedPasswordXP < passwordPoints)) {
+        let diff = passwordPoints - (userState.syncedPasswordXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedPasswordXP = passwordPoints;
+        saveState();
+    }
+
+    // Sincronizza i punti XP di Royal Chess (Master Chess)
+    if (chessPoints > 0 && (!userState.syncedChessXP || userState.syncedChessXP < chessPoints)) {
+        let diff = chessPoints - (userState.syncedChessXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedChessXP = chessPoints;
+        saveState();
+    }
+
+    // Sincronizza i punti XP di Cyber Deck (Master Blackjack)
+    if (blackjackPoints > 0 && (!userState.syncedBlackjackXP || userState.syncedBlackjackXP < blackjackPoints)) {
+        let diff = blackjackPoints - (userState.syncedBlackjackXP || 0);
+        userState.xp = (userState.xp || 0) + diff;
+        userState.syncedBlackjackXP = blackjackPoints;
+        saveState();
+    }
     
     // Sincronizza i punti XP di Master Sudoku
     if (sudokuPoints > 0 && (!userState.syncedSudokuXP || userState.syncedSudokuXP < sudokuPoints)) {

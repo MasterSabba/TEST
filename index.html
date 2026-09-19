@@ -1267,6 +1267,11 @@
                     userScore = Math.max(userScore, wordlePts);
                 }
 
+                if (game === "Digit Logic") {
+                    const sudokuPts = parseInt(localStorage.getItem("points_mastersudoku")) || 0;
+                    userScore = Math.max(userScore, sudokuPts);
+                }
+
                 if (userState.username && userState.username !== "Ospite") {
                     let idx = structure.findIndex(item => item.n.toLowerCase() === userState.username.toLowerCase());
                     if (idx !== -1) { 
@@ -1460,21 +1465,37 @@
             }
         });
 
-        function syncLocalGameScores() {
+function syncLocalGameScores() {
     const wordlePoints = parseInt(localStorage.getItem("points_masterwordle")) || 0;
     const wordleWins = parseInt(localStorage.getItem("wins_masterwordle")) || 0;
+    
+    // Sincronizzazione Master Sudoku
     const sudokuPoints = parseInt(localStorage.getItem("points_mastersudoku")) || 0;
+    const sudokuWins = parseInt(localStorage.getItem("wins_mastersudoku")) || 0;
 
     if (!userState.winsPerGame) userState.winsPerGame = {};
     
+    // Sincronizza le vittorie in classifica
     if (wordleWins > (userState.winsPerGame['Word Rush'] || 0)) {
         userState.winsPerGame['Word Rush'] = wordleWins;
     }
+    if (sudokuWins > (userState.winsPerGame['Digit Logic'] || 0)) {
+        userState.winsPerGame['Digit Logic'] = sudokuWins;
+    }
 
+    // Sincronizza i punti XP di Wordle
     if (wordlePoints > 0 && (!userState.syncedWordleXP || userState.syncedWordleXP < wordlePoints)) {
         let diff = wordlePoints - (userState.syncedWordleXP || 0);
         userState.xp = (userState.xp || 0) + diff;
         userState.syncedWordleXP = wordlePoints;
+        saveState();
+    } 
+    
+    // Sincronizza i punti XP di Master Sudoku
+    if (sudokuPoints > 0 && (!userState.syncedSudokuXP || userState.syncedSudokuXP < sudokuPoints)) {
+        let diffSudoku = sudokuPoints - (userState.syncedSudokuXP || 0);
+        userState.xp = (userState.xp || 0) + diffSudoku;
+        userState.syncedSudokuXP = sudokuPoints;
         saveState();
     } else {
         updateUI();

@@ -442,7 +442,6 @@
 
         .footer { text-align: center; padding: 2rem; border-top: var(--border-glass); color: var(--text-dim); font-size: 0.85rem; margin-top: auto; }
 
-        /* MODALE ISTRUZIONI INSTALLAZIONE IOS */
         .ios-install-guide {
             text-align: center;
             padding: 1rem 0;
@@ -472,55 +471,18 @@
             flex-shrink: 0;
         }
 
-        /* MEDIA QUERIES PER DISPOSITIVI MOBILI / TELEFONI */
         @media (max-width: 600px) {
-            .navbar {
-                padding: 0.6rem 0.8rem;
-            }
-            
-            .logo-container {
-                font-size: 0.95rem;
-            }
-
-            .logo-container span {
-                display: flex;
-                gap: 2px;
-            }
-
-            .hub-actions {
-                gap: 0.3rem;
-            }
-
-            .hub-btn {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.85rem;
-            }
-
-            /* Nasconde i testi dei pulsanti e lascia solo le icone su schermi piccoli */
-            .btn-text {
-                display: none;
-            }
-
-            .hero-title {
-                font-size: 1.6rem;
-            }
-
-            .hero-subtitle {
-                font-size: 0.85rem;
-            }
-
-            .games-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .main-container {
-                padding: 0 0.8rem 2rem;
-            }
-
-            .modal-card {
-                padding: 1.2rem;
-            }
+            .navbar { padding: 0.6rem 0.8rem; }
+            .logo-container { font-size: 0.95rem; }
+            .logo-container span { display: flex; gap: 2px; }
+            .hub-actions { gap: 0.3rem; }
+            .hub-btn { padding: 0.4rem 0.6rem; font-size: 0.85rem; }
+            .btn-text { display: none; }
+            .hero-title { font-size: 1.6rem; }
+            .hero-subtitle { font-size: 0.85rem; }
+            .games-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .main-container { padding: 0 0.8rem 2rem; }
+            .modal-card { padding: 1.2rem; }
         }
     </style>
 </head>
@@ -876,16 +838,13 @@
         </div>
     </div>
 
-    <!-- MODALE GUIDA INSTALLAZIONE APP SU DISPOSITIVI (PWA/IOS/DESKTOP) -->
     <div id="installAppModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
                 <h3>📱 Installa MasterSabba Arcade</h3>
                 <button class="modal-close" onclick="closeModal('installAppModal')">✕</button>
             </div>
-            <div id="installModalContent" class="ios-install-guide">
-                <!-- Il contenuto viene inserito dinamicamente da JS a seconda del dispositivo -->
-            </div>
+            <div id="installModalContent" class="ios-install-guide"></div>
             <div style="text-align: center; margin-top: 1.2rem;">
                 <button class="hub-btn" onclick="closeModal('installAppModal')">Capito!</button>
             </div>
@@ -935,7 +894,6 @@
         let isFirebaseActive = false;
         let isRegistering = false;
 
-        // Gestione evento installazione PWA (Windows/Chrome/Android)
         let deferredPrompt = null;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -952,7 +910,6 @@
             }
 
             if (deferredPrompt) {
-                // Se l'evento nativo è disponibile (Windows/Android/Chrome), avvialo subito
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
@@ -961,37 +918,20 @@
                     deferredPrompt = null;
                 });
             } else if (isIOS) {
-                // Se siamo su iOS (iPad/iPhone) mostriamo le istruzioni con l'icona condivisione
                 const content = document.getElementById('installModalContent');
                 content.innerHTML = `
                     <p style="color: var(--text-secondary); margin-bottom: 1rem;">Per installare l'app sul tuo iPhone o iPad:</p>
-                    <div class="ios-step">
-                        <div class="ios-step-num">1</div>
-                        <div>Tocca il pulsante <strong>Condividi</strong> <span style="font-size:1.2rem">⎋</span> / <span style="font-size:1.2rem">⍞</span> in Safari.</div>
-                    </div>
-                    <div class="ios-step">
-                        <div class="ios-step-num">2</div>
-                        <div>Scorri e seleziona <strong>"Aggiungi alla schermata Home"</strong> ➕.</div>
-                    </div>
-                    <div class="ios-step">
-                        <div class="ios-step-num">3</div>
-                        <div>Conferma premendo <strong>Aggiungi</strong> in alto a destra.</div>
-                    </div>
+                    <div class="ios-step"><div class="ios-step-num">1</div><div>Tocca il pulsante <strong>Condividi</strong> ⎋ / ⍞ in Safari.</div></div>
+                    <div class="ios-step"><div class="ios-step-num">2</div><div>Scorri e seleziona <strong>"Aggiungi alla schermata Home"</strong> ➕.</div></div>
+                    <div class="ios-step"><div class="ios-step-num">3</div><div>Conferma premendo <strong>Aggiungi</strong> in alto a destra.</div></div>
                 `;
                 openModal('installAppModal');
             } else {
-                // Desktop o browser senza evento nativo attivo
                 const content = document.getElementById('installModalContent');
                 content.innerHTML = `
                     <p style="color: var(--text-secondary); margin-bottom: 1rem;">Installa MasterSabba Arcade come app sul tuo computer o telefono:</p>
-                    <div class="ios-step">
-                        <div class="ios-step-num">1</div>
-                        <div>Se usi un computer: Clicca in altro a destra sui tre puntini, <strong>Salva e Condividi</strong> 💻 / ➕ e installa pagina come app.</div>
-                    </div>
-                    <div class="ios-step">
-                        <div class="ios-step-num">2</div>
-                        <div>Se usi il browser da telefono: Apri il menu condividi e clicca visualizza altro, poi <strong>"Aggiungi alla schermata Home"</strong>.</div>
-                    </div>
+                    <div class="ios-step"><div class="ios-step-num">1</div><div>Se usi un computer: Clicca in alto a destra sui tre puntini, <strong>Salva e Condividi</strong> 💻 / ➕ e installa pagina come app.</div></div>
+                    <div class="ios-step"><div class="ios-step-num">2</div><div>Se usi il browser da telefono: Apri il menu condividi e clicca visualizza altro, poi <strong>"Aggiungi alla schermata Home"</strong>.</div></div>
                 `;
                 openModal('installAppModal');
             }
@@ -1061,30 +1001,10 @@
             const targetXP = (lvl * 300);
 
             return [
-                {
-                    id: `q_win_lvl_${lvl}`,
-                    title: `🏆 Trionfo Arcade: Ottieni ${targetWins} vittorie`,
-                    reward: 50 * lvl,
-                    target: targetWins
-                },
-                {
-                    id: `q_vote_lvl_${lvl}`,
-                    title: `⭐ Critico Arcade: Vota ${targetVotes} giochi`,
-                    reward: 50 * lvl,
-                    target: targetVotes
-                },
-                {
-                    id: `q_xp_lvl_${lvl}`,
-                    title: `⚡ Traguardo XP: Raggiungi ${targetXP} XP totali`,
-                    reward: 60 * lvl,
-                    target: targetXP
-                },
-                {
-                    id: `q_lab_lvl_${lvl}`,
-                    title: `🧪 Innovatore: Prova il MasterLab`,
-                    reward: 80 * lvl,
-                    target: 1
-                }
+                { id: `q_win_lvl_${lvl}`, title: `🏆 Trionfo Arcade: Ottieni ${targetWins} vittorie`, reward: 50 * lvl, target: targetWins },
+                { id: `q_vote_lvl_${lvl}`, title: `⭐ Critico Arcade: Vota ${targetVotes} giochi`, reward: 50 * lvl, target: targetVotes },
+                { id: `q_xp_lvl_${lvl}`, title: `⚡ Traguardo XP: Raggiungi ${targetXP} XP totali`, reward: 60 * lvl, target: targetXP },
+                { id: `q_lab_lvl_${lvl}`, title: `🧪 Innovatore: Prova il MasterLab`, reward: 80 * lvl, target: 1 }
             ];
         }
 
@@ -1210,6 +1130,7 @@
                             currentUser = cred.user;
                             userState.username = username;
                             window.hubCurrentUser = username;
+                            localStorage.setItem('masterhub_logged_user', cred.user.uid);
                             db.ref('users/' + cred.user.uid).set(userState);
                             showAuthUI(true);
                             updateUI();
@@ -1219,6 +1140,7 @@
                     auth.signInWithEmailAndPassword(email, password)
                         .then(cred => {
                             currentUser = cred.user;
+                            localStorage.setItem('masterhub_logged_user', cred.user.uid);
                             loadUserData(cred.user.uid);
                         })
                         .catch(err => errorDiv.innerText = "Credenziali errate o errore di login.");
@@ -1252,6 +1174,7 @@
             currentUser = null;
             window.hubCurrentUser = null;
             localStorage.removeItem('currentSession');
+            localStorage.removeItem('masterhub_logged_user');
             userState = {...defaultState};
             localStorage.removeItem('mastersabba_arcade_v2');
             localStorage.removeItem(STORAGE_KEY_QUESTS);
@@ -1261,6 +1184,7 @@
 
         function loadUserData(uid) {
             if (!db) return;
+            localStorage.setItem('masterhub_logged_user', uid);
             db.ref('users/' + uid).once('value').then((snapshot) => {
                 if (snapshot.exists()) {
                     userState = { ...defaultState, ...snapshot.val() };
@@ -1281,6 +1205,7 @@
 
         function startLocalSession(email, accountData) {
             localStorage.setItem('currentSession', email);
+            localStorage.setItem('masterhub_logged_user', email);
             userState.username = accountData.username || email.split('@')[0];
             userState.xp = accountData.xp || 0;
             window.hubCurrentUser = userState.username;
@@ -1303,16 +1228,15 @@
             }
         }
 
-       function saveState() {
-    // Sostituita la vecchia riga con la chiave dinamica per utente/guest
-    const storageKey = currentUser ? `arcade_v2_${currentUser.uid}` : 'arcade_v2_guest';
-    localStorage.setItem(storageKey, JSON.stringify(userState));
+        function saveState() {
+            const storageKey = currentUser ? `arcade_v2_${currentUser.uid}` : 'arcade_v2_guest';
+            localStorage.setItem(storageKey, JSON.stringify(userState));
 
-    if (isFirebaseActive && currentUser) {
-        saveUserData(currentUser.uid);
-    }
-    updateUI();
-}
+            if (isFirebaseActive && currentUser) {
+                saveUserData(currentUser.uid);
+            }
+            updateUI();
+        }
 
         function updateUI() {
             document.getElementById('navUsername').textContent = userState.username;
@@ -1435,69 +1359,17 @@
             if(overlordNameEl) overlordNameEl.textContent = absoluteWinner.toUpperCase();
             if(overlordScoreEl) overlordScoreEl.textContent = `${maxOverallScore} Punti Totali`;
 
+            const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
+            const prefix = (currentUid && currentUid !== 'guest') ? `${currentUid}_` : 'guest_';
+
             Object.keys(window.globalRivals).forEach(game => {
                 let structure = JSON.parse(JSON.stringify(window.globalRivals[game]));
                 let userGameWins = userState.winsPerGame?.[game] || 0;
                 let userScore = userGameWins * 10;
 
-                if (game === "Word Rush") {
-                    const wordlePts = parseInt(localStorage.getItem("points_masterwordle")) || 0;
-                    userScore = Math.max(userScore, wordlePts);
-                }
-
-                if (game === "Digit Logic") {
-                    const sudokuPts = parseInt(localStorage.getItem("points_mastersudoku")) || 0;
-                    userScore = Math.max(userScore, sudokuPts);
-                }
-
-                 if (game === "Spark Bombs") {
-                    const kittensPts = parseInt(localStorage.getItem("points_masterkittens")) || 0;
-                    userScore = Math.max(userScore, kittensPts);
-                }
-
-                if (game === "Color Storm") {
-                    const unoPts = parseInt(localStorage.getItem("points_masteruno")) || 0;
-                    userScore = Math.max(userScore, unoPts);
-                }
-
-                if (game === "Cyber Crime") {
-                    const murderPts = parseInt(localStorage.getItem("points_mastermurder")) || 0;
-                    userScore = Math.max(userScore, murderPts);
-                }
-
-                if (game === "Word Duel") {
-                    const verbumPts = parseInt(localStorage.getItem("points_masterverbum")) || 0;
-                    userScore = Math.max(userScore, verbumPts);
-                }
-
-                if (game === "Key Speed") {
-                    const keyPts = parseInt(localStorage.getItem("points_masterkey")) || 0;
-                    userScore = Math.max(userScore, keyPts);
-                }
-
                 if (game === "Tetra Block") {
-                    const blockPts = parseInt(localStorage.getItem("points_masterblock")) || 0;
+                    const blockPts = parseInt(localStorage.getItem(`${prefix}points_masterblock`)) || 0;
                     userScore = Math.max(userScore, blockPts);
-                }
-
-                if (game === "Tris Battle") {
-                    const trisPts = parseInt(localStorage.getItem("points_mastertris")) || 0;
-                    userScore = Math.max(userScore, trisPts);
-                }
-
-                if (game === "Code Breaker") {
-                    const passwordPts = parseInt(localStorage.getItem("points_masterpassword")) || 0;
-                    userScore = Math.max(userScore, passwordPts);
-                }
-
-                if (game === "Royal Chess") {
-                    const chessPts = parseInt(localStorage.getItem("points_masterchess")) || 0;
-                    userScore = Math.max(userScore, chessPts);
-                }
-
-                if (game === "Cyber Deck") {
-                    const blackjackPts = parseInt(localStorage.getItem("points_masterblackjack")) || 0;
-                    userScore = Math.max(userScore, blackjackPts);
                 }
 
                 if (userState.username && userState.username !== "Ospite") {
@@ -1547,52 +1419,31 @@
         }
 
         function resetStats() {
-    if (confirm("Vuoi resettare i tuoi progressi locali?")) {
-        localStorage.removeItem('mastersabba_arcade_v2');
-        localStorage.removeItem(STORAGE_KEY_QUESTS);
-        
-        // Reset punti e vittorie per ogni gioco
-        localStorage.removeItem('points_masterwordle');
-        localStorage.removeItem('wins_masterwordle');
+            if (confirm("Vuoi resettare i tuoi progressi locali?")) {
+                const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
+                const prefix = (currentUid && currentUid !== 'guest') ? `${currentUid}_` : 'guest_';
 
-        localStorage.removeItem('points_mastersudoku');
-        localStorage.removeItem('wins_mastersudoku');
+                localStorage.removeItem('mastersabba_arcade_v2');
+                localStorage.removeItem(`arcade_v2_${currentUid}`);
+                localStorage.removeItem(STORAGE_KEY_QUESTS);
+                localStorage.removeItem('masterhub_logged_user');
 
-        localStorage.removeItem('points_masterkittens');
-        localStorage.removeItem('wins_masterkittens');
+                // Pulisce sia i dati generici che quelli specifici dell'utente
+                const gameKeys = ['masterblock', 'masterwordle', 'mastersudoku', 'masterkittens', 'masteruno', 'mastermurder', 'masterverbum', 'masterkey', 'mastertris', 'masterpassword', 'masterchess', 'masterblackjack'];
+                gameKeys.forEach(k => {
+                    localStorage.removeItem(`points_${k}`);
+                    localStorage.removeItem(`wins_${k}`);
+                    localStorage.removeItem(`${prefix}points_${k}`);
+                    localStorage.removeItem(`${prefix}wins_${k}`);
+                    localStorage.removeItem(`${prefix}${k}_hub_points`);
+                    localStorage.removeItem(`${prefix}${k}_best_score`);
+                });
 
-        localStorage.removeItem('points_masteruno');
-        localStorage.removeItem('wins_masteruno');
-
-        localStorage.removeItem('points_mastermurder');
-        localStorage.removeItem('wins_mastermurder');
-
-        localStorage.removeItem('points_masterverbum');
-        localStorage.removeItem('wins_masterverbum');
-
-        localStorage.removeItem('points_masterkey');
-        localStorage.removeItem('wins_masterkey');
-
-        localStorage.removeItem('points_masterblock');
-        localStorage.removeItem('wins_masterblock');
-
-        localStorage.removeItem('points_mastertris');
-        localStorage.removeItem('wins_mastertris');
-
-        localStorage.removeItem('points_masterpassword');
-        localStorage.removeItem('wins_masterpassword');
-
-        localStorage.removeItem('points_masterchess');
-        localStorage.removeItem('wins_masterchess');
-
-        localStorage.removeItem('points_masterblackjack');
-        localStorage.removeItem('wins_masterblackjack');
-        
-        userState = {...defaultState};
-        window.hubCurrentUser = null;
-        saveState();
-    }
-}
+                userState = {...defaultState};
+                window.hubCurrentUser = null;
+                saveState();
+            }
+        }
 
         function openGamePreview(gameId) {
             const data = gameDataMap[gameId];
@@ -1602,11 +1453,15 @@
             document.getElementById('prevControls').textContent = data.controls;
             
             const playBtn = document.getElementById('prevPlayBtn');
+            const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
             
+            // Garantisce che il gioco conosca l'utente dell'Hub prima di essere aperto
+            localStorage.setItem('masterhub_logged_user', currentUid);
+
             let finalUrl = data.url;
             if (userState.username && userState.username !== "Ospite") {
                 const separator = finalUrl.includes('?') ? '&' : '?';
-                finalUrl += `${separator}player=${encodeURIComponent(userState.username)}`;
+                finalUrl += `${separator}player=${encodeURIComponent(userState.username)}&userId=${encodeURIComponent(currentUid)}`;
             }
             
             playBtn.href = finalUrl;
@@ -1719,167 +1574,28 @@
             }, 350);
         }
 
-        window.addEventListener('message', function(event) {
-            if (event.data && event.data.type === 'GAME_WIN') {
-                const gameKey = event.data.gameKey;
-                const points = event.data.points;
-                if (gameKey) {
-                    triggerGameWin(gameKey, points);
-                }
+        function syncLocalGameScores() {
+            const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
+            const prefix = (currentUid && currentUid !== 'guest') ? `${currentUid}_` : 'guest_';
+
+            const blockPoints = parseInt(localStorage.getItem(`${prefix}points_masterblock`)) || parseInt(localStorage.getItem(`${prefix}masterblock_hub_points`)) || 0;
+            const blockWins = parseInt(localStorage.getItem(`${prefix}wins_masterblock`)) || 0;
+
+            if (!userState.winsPerGame) userState.winsPerGame = {};
+
+            if (blockWins > (userState.winsPerGame['Tetra Block'] || 0)) {
+                userState.winsPerGame['Tetra Block'] = blockWins;
             }
-        });
 
-function syncLocalGameScores() {
-    const wordlePoints = parseInt(localStorage.getItem("points_masterwordle")) || 0;
-    const wordleWins = parseInt(localStorage.getItem("wins_masterwordle")) || 0;
-
-    const sudokuPoints = parseInt(localStorage.getItem("points_mastersudoku")) || 0;
-    const sudokuWins = parseInt(localStorage.getItem("wins_mastersudoku")) || 0;
-
-    const kittensPoints = parseInt(localStorage.getItem("points_masterkittens")) || 0;
-    const kittensWins = parseInt(localStorage.getItem("wins_masterkittens")) || 0;
-
-    const unoPoints = parseInt(localStorage.getItem("points_masteruno")) || 0;
-    const unoWins = parseInt(localStorage.getItem("wins_masteruno")) || 0;
-
-    const murderPoints = parseInt(localStorage.getItem("points_mastermurder")) || 0;
-    const murderWins = parseInt(localStorage.getItem("wins_mastermurder")) || 0;
-
-    const verbumPoints = parseInt(localStorage.getItem("points_masterverbum")) || 0;
-    const verbumWins = parseInt(localStorage.getItem("wins_masterverbum")) || 0;
-
-    const keyPoints = parseInt(localStorage.getItem("points_masterkey")) || 0;
-    const keyWins = parseInt(localStorage.getItem("wins_masterkey")) || 0;
-
-    const blockPoints = parseInt(localStorage.getItem("points_masterblock")) || 0;
-    const blockWins = parseInt(localStorage.getItem("wins_masterblock")) || 0;
-
-    const trisPoints = parseInt(localStorage.getItem("points_mastertris")) || 0;
-    const trisWins = parseInt(localStorage.getItem("wins_mastertris")) || 0;
-
-    const passwordPoints = parseInt(localStorage.getItem("points_masterpassword")) || 0;
-    const passwordWins = parseInt(localStorage.getItem("wins_masterpassword")) || 0;
-
-    const chessPoints = parseInt(localStorage.getItem("points_masterchess")) || 0;
-    const chessWins = parseInt(localStorage.getItem("wins_masterchess")) || 0;
-
-    const blackjackPoints = parseInt(localStorage.getItem("points_masterblackjack")) || 0;
-    const blackjackWins = parseInt(localStorage.getItem("wins_masterblackjack")) || 0;
-
-    if (!userState.winsPerGame) userState.winsPerGame = {};
-
-    // Sincronizza le vittorie in classifica per ogni gioco
-    if (wordleWins > (userState.winsPerGame['Word Rush'] || 0)) userState.winsPerGame['Word Rush'] = wordleWins;
-    if (sudokuWins > (userState.winsPerGame['Digit Logic'] || 0)) userState.winsPerGame['Digit Logic'] = sudokuWins;
-    if (kittensWins > (userState.winsPerGame['Spark Bombs'] || 0)) userState.winsPerGame['Spark Bombs'] = kittensWins;
-    if (unoWins > (userState.winsPerGame['Color Storm'] || 0)) userState.winsPerGame['Color Storm'] = unoWins;
-    if (murderWins > (userState.winsPerGame['Cyber Crime'] || 0)) userState.winsPerGame['Cyber Crime'] = murderWins;
-    if (verbumWins > (userState.winsPerGame['Word Duel'] || 0)) userState.winsPerGame['Word Duel'] = verbumWins;
-    if (keyWins > (userState.winsPerGame['Key Speed'] || 0)) userState.winsPerGame['Key Speed'] = keyWins;
-    if (blockWins > (userState.winsPerGame['Tetra Block'] || 0)) userState.winsPerGame['Tetra Block'] = blockWins;
-    if (trisWins > (userState.winsPerGame['Tris Battle'] || 0)) userState.winsPerGame['Tris Battle'] = trisWins;
-    if (passwordWins > (userState.winsPerGame['Code Breaker'] || 0)) userState.winsPerGame['Code Breaker'] = passwordWins;
-    if (chessWins > (userState.winsPerGame['Royal Chess'] || 0)) userState.winsPerGame['Royal Chess'] = chessWins;
-    if (blackjackWins > (userState.winsPerGame['Cyber Deck'] || 0)) userState.winsPerGame['Cyber Deck'] = blackjackWins;
-
-    // Sincronizza i punti XP di Wordle
-    if (wordlePoints > 0 && (!userState.syncedWordleXP || userState.syncedWordleXP < wordlePoints)) {
-        let diff = wordlePoints - (userState.syncedWordleXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedWordleXP = wordlePoints;
-        saveState();
-    } 
-
-    // Sincronizza i punti XP di kittens
-    if (kittensPoints > 0 && (!userState.syncedKittensXP || userState.syncedKittensXP < kittensPoints)) {
-        let diff = kittensPoints - (userState.syncedKittensXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedKittensXP = kittensPoints;
-        saveState();
-    } 
-    
-    // Sincronizza i punti XP di Color Storm (Master Uno)
-    if (unoPoints > 0 && (!userState.syncedUnoXP || userState.syncedUnoXP < unoPoints)) {
-        let diff = unoPoints - (userState.syncedUnoXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedUnoXP = unoPoints;
-        saveState();
-    }
-
-    // Sincronizza i punti XP di Cyber Crime (Master Murder)
-    if (murderPoints > 0 && (!userState.syncedMurderXP || userState.syncedMurderXP < murderPoints)) {
-        let diff = murderPoints - (userState.syncedMurderXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedMurderXP = murderPoints;
-        saveState();
-    }
-
-    // Sincronizza i punti XP di Word Duel (Master Verbum)
-    if (verbumPoints > 0 && (!userState.syncedVerbumXP || userState.syncedVerbumXP < verbumPoints)) {
-        let diff = verbumPoints - (userState.syncedVerbumXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedVerbumXP = verbumPoints;
-        saveState();
-    }
-
-    // Sincronizza i punti XP di Key Speed (Master Key)
-    if (keyPoints > 0 && (!userState.syncedKeyXP || userState.syncedKeyXP < keyPoints)) {
-        let diff = keyPoints - (userState.syncedKeyXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedKeyXP = keyPoints;
-        saveState();
-    }
-
-    // Sincronizza i punti XP di Tetra Block (Master Block)
-    if (blockPoints > 0 && (!userState.syncedBlockXP || userState.syncedBlockXP < blockPoints)) {
-        let diff = blockPoints - (userState.syncedBlockXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedBlockXP = blockPoints;
-        saveState();
-    }
-
-    // Sincronizza i punti XP di Tris Battle (Master Tris)
-    if (trisPoints > 0 && (!userState.syncedTrisXP || userState.syncedTrisXP < trisPoints)) {
-        let diff = trisPoints - (userState.syncedTrisXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedTrisXP = trisPoints;
-        saveState();
-    }
-
-    // Sincronizza i punti XP di Code Breaker (Master Password)
-    if (passwordPoints > 0 && (!userState.syncedPasswordXP || userState.syncedPasswordXP < passwordPoints)) {
-        let diff = passwordPoints - (userState.syncedPasswordXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedPasswordXP = passwordPoints;
-        saveState();
-    }
-
-    // Sincronizza i punti XP di Royal Chess (Master Chess)
-    if (chessPoints > 0 && (!userState.syncedChessXP || userState.syncedChessXP < chessPoints)) {
-        let diff = chessPoints - (userState.syncedChessXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedChessXP = chessPoints;
-        saveState();
-    }
-
-    // Sincronizza i punti XP di Cyber Deck (Master Blackjack)
-    if (blackjackPoints > 0 && (!userState.syncedBlackjackXP || userState.syncedBlackjackXP < blackjackPoints)) {
-        let diff = blackjackPoints - (userState.syncedBlackjackXP || 0);
-        userState.xp = (userState.xp || 0) + diff;
-        userState.syncedBlackjackXP = blackjackPoints;
-        saveState();
-    }
-    
-    // Sincronizza i punti XP di Master Sudoku
-    if (sudokuPoints > 0 && (!userState.syncedSudokuXP || userState.syncedSudokuXP < sudokuPoints)) {
-        let diffSudoku = sudokuPoints - (userState.syncedSudokuXP || 0);
-        userState.xp = (userState.xp || 0) + diffSudoku;
-        userState.syncedSudokuXP = sudokuPoints;
-        saveState();
-    } else {
-        updateUI();
-    }
-}
+            if (blockPoints > 0 && (!userState.syncedBlockXP || userState.syncedBlockXP < blockPoints)) {
+                let diff = blockPoints - (userState.syncedBlockXP || 0);
+                userState.xp = (userState.xp || 0) + diff;
+                userState.syncedBlockXP = blockPoints;
+                saveState();
+            } else {
+                updateUI();
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             syncLocalGameScores();
@@ -1888,6 +1604,7 @@ function syncLocalGameScores() {
                 auth.onAuthStateChanged((user) => {
                     if (user) {
                         currentUser = user;
+                        localStorage.setItem('masterhub_logged_user', user.uid);
                         loadUserData(user.uid);
                     } else {
                         showAuthUI(false);
@@ -1898,32 +1615,32 @@ function syncLocalGameScores() {
             }
         });
 
-window.addEventListener('focus', () => {
-    syncLocalGameScores();
-});
+        window.addEventListener('focus', () => {
+            syncLocalGameScores();
+        });
 
-window.addEventListener('storage', (event) => {
-    if (event.key && (event.key.startsWith('points_') || event.key.startsWith('wins_'))) {
-        syncLocalGameScores();
-    }
-});
+        window.addEventListener('storage', (event) => {
+            if (event.key && (event.key.startsWith('points_') || event.key.startsWith('wins_') || event.key.includes('_points_') || event.key.includes('_wins_'))) {
+                syncLocalGameScores();
+            }
+        });
 
-window.addEventListener('message', (event) => {
-    const { gameKey, points, userId } = event.data;
+        window.addEventListener('message', (event) => {
+            const { gameKey, points, userId } = event.data || {};
 
-    // Se l'evento non ha i dati minimi del gioco, ignora
-    if (!gameKey) return;
+            if (!gameKey) return;
 
-    // Se l'utente è loggato, verifica che l'ID inviato dal gioco coincida
-    if (currentUser) {
-        if (userId === currentUser.uid) {
-            registerWin(gameKey, points);
-        }
-    } else {
-        // Se è un utente ospite, accetta il punteggio senza controllo ID
-        registerWin(gameKey, points);
-    }
-});
+            const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
+
+            // Accetta i punti ricevuti solo se appartengono all'utente loggato attuale o all'ospite corrente
+            if (userId === currentUid) {
+                registerWin(gameKey, points);
+            } else if (!currentUser && userId === 'guest') {
+                registerWin(gameKey, points);
+            } else {
+                console.warn(`Punteggio ignorato: ID utente del gioco (${userId}) non corrisponde all'utente dell'Hub (${currentUid}).`);
+            }
+        });
     </script>
 </body>
 </html>

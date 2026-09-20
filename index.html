@@ -985,6 +985,8 @@
             avatar: "⚡",
             xp: 0,
             syncedWordleXP: 0,
+            syncedBlockXP: 0,
+            syncedTrisXP: 0,
             gamesPlayed: 0,
             ratings: {},
             achievements: { firstVote: false, firstPlay: false, labTester: false, customProfile: false },
@@ -1592,6 +1594,7 @@
             if (blockWins > (userState.winsPerGame['Tetra Block'] || 0)) {
                 userState.winsPerGame['Tetra Block'] = blockWins;
             }
+
             if (trisWins > (userState.winsPerGame['Tris Battle'] || 0)) {
                 userState.winsPerGame['Tris Battle'] = trisWins;
             }

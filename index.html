@@ -985,8 +985,6 @@
             avatar: "⚡",
             xp: 0,
             syncedWordleXP: 0,
-            syncedBlockXP: 0,
-            syncedTrisXP: 0,
             gamesPlayed: 0,
             ratings: {},
             achievements: { firstVote: false, firstPlay: false, labTester: false, customProfile: false },
@@ -1374,11 +1372,6 @@
                     userScore = Math.max(userScore, blockPts);
                 }
 
-                if (game === "Tris Battle") {
-                    const trisPts = parseInt(localStorage.getItem(`${prefix}points_mastertris`)) || 0;
-                    userScore = Math.max(userScore, trisPts);
-                }
-
                 if (userState.username && userState.username !== "Ospite") {
                     let idx = structure.findIndex(item => item.n.toLowerCase() === userState.username.toLowerCase());
                     if (idx !== -1) { 
@@ -1435,6 +1428,7 @@
                 localStorage.removeItem(STORAGE_KEY_QUESTS);
                 localStorage.removeItem('masterhub_logged_user');
 
+                // Pulisce sia i dati generici che quelli specifici dell'utente
                 const gameKeys = ['masterblock', 'masterwordle', 'mastersudoku', 'masterkittens', 'masteruno', 'mastermurder', 'masterverbum', 'masterkey', 'mastertris', 'masterpassword', 'masterchess', 'masterblackjack'];
                 gameKeys.forEach(k => {
                     localStorage.removeItem(`points_${k}`);
@@ -1461,6 +1455,7 @@
             const playBtn = document.getElementById('prevPlayBtn');
             const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
             
+            // Garantisce che il gioco conosca l'utente dell'Hub prima di essere aperto
             localStorage.setItem('masterhub_logged_user', currentUid);
 
             let finalUrl = data.url;
@@ -1586,36 +1581,16 @@
             const blockPoints = parseInt(localStorage.getItem(`${prefix}points_masterblock`)) || parseInt(localStorage.getItem(`${prefix}masterblock_hub_points`)) || 0;
             const blockWins = parseInt(localStorage.getItem(`${prefix}wins_masterblock`)) || 0;
 
-            const trisPoints = parseInt(localStorage.getItem(`${prefix}points_mastertris`)) || parseInt(localStorage.getItem(`${prefix}mastertris_hub_points`)) || 0;
-            const trisWins = parseInt(localStorage.getItem(`${prefix}wins_mastertris`)) || 0;
-
             if (!userState.winsPerGame) userState.winsPerGame = {};
 
             if (blockWins > (userState.winsPerGame['Tetra Block'] || 0)) {
                 userState.winsPerGame['Tetra Block'] = blockWins;
             }
 
-            if (trisWins > (userState.winsPerGame['Tris Battle'] || 0)) {
-                userState.winsPerGame['Tris Battle'] = trisWins;
-            }
-
-            let stateChanged = false;
-
             if (blockPoints > 0 && (!userState.syncedBlockXP || userState.syncedBlockXP < blockPoints)) {
                 let diff = blockPoints - (userState.syncedBlockXP || 0);
                 userState.xp = (userState.xp || 0) + diff;
                 userState.syncedBlockXP = blockPoints;
-                stateChanged = true;
-            }
-
-            if (trisPoints > 0 && (!userState.syncedTrisXP || userState.syncedTrisXP < trisPoints)) {
-                let diff = trisPoints - (userState.syncedTrisXP || 0);
-                userState.xp = (userState.xp || 0) + diff;
-                userState.syncedTrisXP = trisPoints;
-                stateChanged = true;
-            }
-
-            if (stateChanged) {
                 saveState();
             } else {
                 updateUI();
@@ -1657,6 +1632,7 @@
 
             const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
 
+            // Accetta i punti ricevuti solo se appartengono all'utente loggato attuale o all'ospite corrente
             if (userId === currentUid) {
                 registerWin(gameKey, points);
             } else if (!currentUser && userId === 'guest') {

@@ -1303,13 +1303,16 @@
             }
         }
 
-        function saveState() {
-            localStorage.setItem('mastersabba_arcade_v2', JSON.stringify(userState));
-            if (isFirebaseActive && currentUser) {
-                saveUserData(currentUser.uid);
-            }
-            updateUI();
-        }
+       function saveState() {
+    // Sostituita la vecchia riga con la chiave dinamica per utente/guest
+    const storageKey = currentUser ? `arcade_v2_${currentUser.uid}` : 'arcade_v2_guest';
+    localStorage.setItem(storageKey, JSON.stringify(userState));
+
+    if (isFirebaseActive && currentUser) {
+        saveUserData(currentUser.uid);
+    }
+    updateUI();
+}
 
         function updateUI() {
             document.getElementById('navUsername').textContent = userState.username;
@@ -1895,15 +1898,32 @@ function syncLocalGameScores() {
             }
         });
 
-        window.addEventListener('focus', () => {
-            syncLocalGameScores();
-        });
+window.addEventListener('focus', () => {
+    syncLocalGameScores();
+});
 
-        window.addEventListener('storage', (event) => {
-            if (event.key && (event.key.startsWith('points_') || event.key.startsWith('wins_'))) {
-                syncLocalGameScores();
-            }
-        });
+window.addEventListener('storage', (event) => {
+    if (event.key && (event.key.startsWith('points_') || event.key.startsWith('wins_'))) {
+        syncLocalGameScores();
+    }
+});
+
+window.addEventListener('message', (event) => {
+    const { gameKey, points, userId } = event.data;
+
+    // Se l'evento non ha i dati minimi del gioco, ignora
+    if (!gameKey) return;
+
+    // Se l'utente è loggato, verifica che l'ID inviato dal gioco coincida
+    if (currentUser) {
+        if (userId === currentUser.uid) {
+            registerWin(gameKey, points);
+        }
+    } else {
+        // Se è un utente ospite, accetta il punteggio senza controllo ID
+        registerWin(gameKey, points);
+    }
+});
     </script>
 </body>
 </html>

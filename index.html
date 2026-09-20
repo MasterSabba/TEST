@@ -323,13 +323,73 @@
         }
         .badge.unlocked { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
+        .lb-nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .lb-tab-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            padding: 8px;
+            border-radius: 8px;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lb-tab-btn.active {
+            background: rgba(0, 243, 255, 0.15);
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-weight: bold;
+        }
+        .lb-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            margin-bottom: 6px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        .lb-row.me {
+            border-color: var(--neon-green);
+            background: rgba(0, 255, 102, 0.1);
+        }
+        .lb-rank {
+            font-family: var(--font-heading);
+            font-weight: bold;
+            width: 30px;
+            color: var(--neon-yellow);
+        }
+        .lb-user {
+            flex: 1;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .lb-score {
+            font-family: var(--font-heading);
+            color: var(--neon-cyan);
+            font-weight: bold;
+        }
+
         .overlord-box {
             background: rgba(168, 17, 255, 0.15);
             border: 1px solid var(--neon-purple);
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 12px;
             text-align: center;
             margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(168, 17, 255, 0.2);
         }
 
         .quest-timer-badge {
@@ -442,33 +502,14 @@
 
         .footer { text-align: center; padding: 2rem; border-top: var(--border-glass); color: var(--text-dim); font-size: 0.85rem; margin-top: auto; }
 
-        .ios-install-guide {
-            text-align: center;
-            padding: 1rem 0;
-        }
+        .ios-install-guide { text-align: center; padding: 1rem 0; }
         .ios-step {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 1.2rem 0;
-            text-align: left;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.8rem 1rem;
-            border-radius: 10px;
-            border: var(--border-glass);
+            display: flex; align-items: center; gap: 1rem; margin: 1.2rem 0; text-align: left;
+            background: rgba(255, 255, 255, 0.05); padding: 0.8rem 1rem; border-radius: 10px; border: var(--border-glass);
         }
         .ios-step-num {
-            background: var(--neon-cyan);
-            color: #000;
-            font-family: var(--font-heading);
-            font-weight: bold;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            background: var(--neon-cyan); color: #000; font-family: var(--font-heading); font-weight: bold;
+            width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
 
         @media (max-width: 600px) {
@@ -781,6 +822,7 @@
         </div>
     </div>
 
+    <!-- MODALE CLASSIFICA -->
     <div id="leaderboardModal" class="modal-overlay">
         <div class="modal-card" style="max-height: 85vh; overflow-y: auto;">
             <div class="modal-header">
@@ -791,7 +833,12 @@
             <div class="overlord-box">
                 <div style="font-size: 0.75rem; color: var(--neon-yellow); letter-spacing: 1px; font-weight: bold;">👑 CAMPIONE ASSOLUTO HIERARCHY</div>
                 <div id="globalOverlordName" style="font-size: 1.2rem; font-weight: bold; color: white; margin-top: 4px;">-</div>
-                <div id="globalOverlordScore" style="font-size: 0.8rem; color: #aaa;">0 Punti Totali</div>
+                <div id="globalOverlordScore" style="font-size: 0.8rem; color: #aaa;">0 XP Totali</div>
+            </div>
+
+            <div class="lb-nav-tabs">
+                <button class="lb-tab-btn active" id="lbTabGlobal" onclick="switchLbView('global')">🌐 Generale (XP)</button>
+                <button class="lb-tab-btn" id="lbTabGames" onclick="switchLbView('games')">🕹️ Per Gioco</button>
             </div>
 
             <div id="leaderboardScoresContainer"></div>
@@ -893,6 +940,7 @@
         let currentUser = null;
         let isFirebaseActive = false;
         let isRegistering = false;
+        let currentLbView = 'global';
 
         let deferredPrompt = null;
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -984,7 +1032,6 @@
             username: "Ospite",
             avatar: "⚡",
             xp: 0,
-            syncedWordleXP: 0,
             gamesPlayed: 0,
             ratings: {},
             achievements: { firstVote: false, firstPlay: false, labTester: false, customProfile: false },
@@ -1152,7 +1199,13 @@
                     if (localAccounts[email]) {
                         errorDiv.innerText = "Account già esistente. Accedi.";
                     } else {
-                        localAccounts[email] = { password: password, username: username, xp: 0 };
+                        localAccounts[email] = { 
+                            password: password, 
+                            username: username, 
+                            xp: userState.xp || 0,
+                            gamesPlayed: userState.gamesPlayed || 0,
+                            winsPerGame: userState.winsPerGame || {}
+                        };
                         localStorage.setItem('mockAccounts', JSON.stringify(localAccounts));
                         startLocalSession(email, localAccounts[email]);
                     }
@@ -1187,8 +1240,16 @@
             localStorage.setItem('masterhub_logged_user', uid);
             db.ref('users/' + uid).once('value').then((snapshot) => {
                 if (snapshot.exists()) {
-                    userState = { ...defaultState, ...snapshot.val() };
+                    let remoteData = snapshot.val();
+                    userState = { 
+                        ...defaultState, 
+                        ...remoteData,
+                        xp: Math.max(userState.xp || 0, remoteData.xp || 0),
+                        gamesPlayed: Math.max(userState.gamesPlayed || 0, remoteData.gamesPlayed || 0),
+                        winsPerGame: { ...(remoteData.winsPerGame || {}), ...(userState.winsPerGame || {}) }
+                    };
                     window.hubCurrentUser = userState.username;
+                    saveUserData(uid);
                 } else {
                     saveUserData(uid);
                 }
@@ -1206,8 +1267,20 @@
         function startLocalSession(email, accountData) {
             localStorage.setItem('currentSession', email);
             localStorage.setItem('masterhub_logged_user', email);
+            
             userState.username = accountData.username || email.split('@')[0];
-            userState.xp = accountData.xp || 0;
+            userState.xp = Math.max(userState.xp || 0, accountData.xp || 0);
+            userState.gamesPlayed = Math.max(userState.gamesPlayed || 0, accountData.gamesPlayed || 0);
+            userState.winsPerGame = { ...(accountData.winsPerGame || {}), ...(userState.winsPerGame || {}) };
+            
+            accountData.xp = userState.xp;
+            accountData.gamesPlayed = userState.gamesPlayed;
+            accountData.winsPerGame = userState.winsPerGame;
+            
+            let localAccounts = JSON.parse(localStorage.getItem('mockAccounts')) || {};
+            localAccounts[email] = accountData;
+            localStorage.setItem('mockAccounts', JSON.stringify(localAccounts));
+
             window.hubCurrentUser = userState.username;
             document.getElementById('authError').innerText = "";
             showAuthUI(true);
@@ -1229,7 +1302,8 @@
         }
 
         function saveState() {
-            const storageKey = currentUser ? `arcade_v2_${currentUser.uid}` : 'arcade_v2_guest';
+            const storageKey = currentUser ? `arcade_v2_${currentUser.uid}` : 'mastersabba_arcade_v2';
+            localStorage.setItem('mastersabba_arcade_v2', JSON.stringify(userState));
             localStorage.setItem(storageKey, JSON.stringify(userState));
 
             if (isFirebaseActive && currentUser) {
@@ -1334,22 +1408,34 @@
             if (dot) dot.style.display = hasClaimableQuests ? 'block' : 'none';
         }
 
+        function switchLbView(view) {
+            currentLbView = view;
+            document.getElementById('lbTabGlobal').classList.toggle('active', view === 'global');
+            document.getElementById('lbTabGames').classList.toggle('active', view === 'games');
+            buildLeaderboards();
+        }
+
         window.buildLeaderboards = function() {
             const container = document.getElementById("leaderboardScoresContainer");
             if (!container) return;
             container.innerHTML = "";
-            let totalAggregatedScores = {};
 
-            Object.values(window.globalRivals).forEach(list => list.forEach(p => totalAggregatedScores[p.n] = (totalAggregatedScores[p.n] || 0) + p.s));
-            
+            let globalPlayers = {};
+
+            Object.values(window.globalRivals).forEach(list => {
+                list.forEach(p => {
+                    globalPlayers[p.n] = (globalPlayers[p.n] || 0) + (p.s * 10);
+                });
+            });
+
             if (userState.username && userState.username !== "Ospite") {
-                totalAggregatedScores[userState.username] = userState.xp || 0;
+                globalPlayers[userState.username] = userState.xp || 0;
             }
 
             let absoluteWinner = "Nessuno", maxOverallScore = -1;
-            Object.keys(totalAggregatedScores).forEach(name => {
-                if (totalAggregatedScores[name] > maxOverallScore) { 
-                    maxOverallScore = totalAggregatedScores[name]; 
+            Object.keys(globalPlayers).forEach(name => {
+                if (globalPlayers[name] > maxOverallScore) { 
+                    maxOverallScore = globalPlayers[name]; 
                     absoluteWinner = name; 
                 }
             });
@@ -1357,48 +1443,60 @@
             const overlordNameEl = document.getElementById("globalOverlordName");
             const overlordScoreEl = document.getElementById("globalOverlordScore");
             if(overlordNameEl) overlordNameEl.textContent = absoluteWinner.toUpperCase();
-            if(overlordScoreEl) overlordScoreEl.textContent = `${maxOverallScore} Punti Totali`;
+            if(overlordScoreEl) overlordScoreEl.textContent = `${maxOverallScore} XP Totali`;
 
-            const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
-            const prefix = (currentUid && currentUid !== 'guest') ? `${currentUid}_` : 'guest_';
+            if (currentLbView === 'global') {
+                let sortedList = Object.keys(globalPlayers).map(name => ({
+                    n: name,
+                    s: globalPlayers[name]
+                })).sort((a, b) => b.s - a.s);
 
-            Object.keys(window.globalRivals).forEach(game => {
-                let structure = JSON.parse(JSON.stringify(window.globalRivals[game]));
-                let userGameWins = userState.winsPerGame?.[game] || 0;
-                let userScore = userGameWins * 10;
-
-                if (game === "Tetra Block") {
-                    const blockPts = parseInt(localStorage.getItem(`${prefix}points_masterblock`)) || 0;
-                    userScore = Math.max(userScore, blockPts);
-                }
-
-                if (userState.username && userState.username !== "Ospite") {
-                    let idx = structure.findIndex(item => item.n.toLowerCase() === userState.username.toLowerCase());
-                    if (idx !== -1) { 
-                        if (userScore > structure[idx].s) structure[idx].s = userScore; 
-                    } else if (userScore > 0) { 
-                        structure.push({ n: userState.username, s: userScore }); 
-                    }
-                }
-                structure.sort((a, b) => b.s - a.s);
-
-                let section = document.createElement("div");
-                section.className = "game-rank-section";
-                section.style = "margin-bottom: 15px; background: #11131c; border: 1px solid #1e2030; padding: 10px; border-radius: 8px;";
-                section.innerHTML = `<h4 style="font-size:0.85rem; color:var(--neon-cyan); margin:0 0 5px 0; text-transform:uppercase;">${game}</h4>`;
-                
-                structure.slice(0, 3).forEach((row, i) => {
-                    let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉";
+                sortedList.forEach((row, i) => {
                     let isMe = userState.username && row.n.toLowerCase() === userState.username.toLowerCase();
-                    let boldStyle = isMe ? "color: var(--neon-green); font-weight: bold;" : "color: #ddd;";
-                    section.innerHTML += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:3px 0; ${boldStyle}"><span>${medal} ${row.n}</span><span>${row.s} pts</span></div>`;
+                    let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`;
+                    
+                    let div = document.createElement("div");
+                    div.className = `lb-row ${isMe ? 'me' : ''}`;
+                    div.innerHTML = `
+                        <div class="lb-rank">${medal}</div>
+                        <div class="lb-user">${row.n} ${isMe ? '(Tu)' : ''}</div>
+                        <div class="lb-score">${row.s} XP</div>
+                    `;
+                    container.appendChild(div);
                 });
-                container.appendChild(section);
-            });
+            } else {
+                Object.keys(window.globalRivals).forEach(game => {
+                    let structure = JSON.parse(JSON.stringify(window.globalRivals[game]));
+                    let userGameWins = userState.winsPerGame?.[game] || 0;
+                    let userScore = userGameWins * 10;
+
+                    if (userState.username && userState.username !== "Ospite") {
+                        let idx = structure.findIndex(item => item.n.toLowerCase() === userState.username.toLowerCase());
+                        if (idx !== -1) { 
+                            if (userScore > structure[idx].s) structure[idx].s = userScore; 
+                        } else if (userScore > 0) { 
+                            structure.push({ n: userState.username, s: userScore }); 
+                        }
+                    }
+                    structure.sort((a, b) => b.s - a.s);
+
+                    let section = document.createElement("div");
+                    section.className = "game-rank-section";
+                    section.style = "margin-bottom: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); padding: 10px; border-radius: 10px;";
+                    section.innerHTML = `<h4 style="font-size:0.85rem; color:var(--neon-cyan); margin:0 0 8px 0; text-transform:uppercase;">${game}</h4>`;
+                    
+                    structure.slice(0, 3).forEach((row, i) => {
+                        let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉";
+                        let isMe = userState.username && row.n.toLowerCase() === userState.username.toLowerCase();
+                        let boldStyle = isMe ? "color: var(--neon-green); font-weight: bold;" : "color: #ddd;";
+                        section.innerHTML += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:4px 0; ${boldStyle}"><span>${medal} ${row.n}</span><span>${row.s} pts</span></div>`;
+                    });
+                    container.appendChild(section);
+                });
+            }
         };
 
         window.openLeaderboard = () => { 
-            syncLocalGameScores();
             openModal('leaderboardModal'); 
         };
 
@@ -1418,30 +1516,14 @@
             }
         }
 
+        // --- RISOLTO: AZZERAMENTO LOCALE REALE ED EFFICACE ---
         function resetStats() {
-            if (confirm("Vuoi resettare i tuoi progressi locali?")) {
-                const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
-                const prefix = (currentUid && currentUid !== 'guest') ? `${currentUid}_` : 'guest_';
-
-                localStorage.removeItem('mastersabba_arcade_v2');
-                localStorage.removeItem(`arcade_v2_${currentUid}`);
-                localStorage.removeItem(STORAGE_KEY_QUESTS);
-                localStorage.removeItem('masterhub_logged_user');
-
-                // Pulisce sia i dati generici che quelli specifici dell'utente
-                const gameKeys = ['masterblock', 'masterwordle', 'mastersudoku', 'masterkittens', 'masteruno', 'mastermurder', 'masterverbum', 'masterkey', 'mastertris', 'masterpassword', 'masterchess', 'masterblackjack'];
-                gameKeys.forEach(k => {
-                    localStorage.removeItem(`points_${k}`);
-                    localStorage.removeItem(`wins_${k}`);
-                    localStorage.removeItem(`${prefix}points_${k}`);
-                    localStorage.removeItem(`${prefix}wins_${k}`);
-                    localStorage.removeItem(`${prefix}${k}_hub_points`);
-                    localStorage.removeItem(`${prefix}${k}_best_score`);
-                });
-
+            if (confirm("Sei sicuro di voler azzerare TUTTI i dati locali e resettare i punteggi?")) {
+                localStorage.clear();
+                sessionStorage.clear();
                 userState = {...defaultState};
                 window.hubCurrentUser = null;
-                saveState();
+                location.reload();
             }
         }
 
@@ -1453,9 +1535,8 @@
             document.getElementById('prevControls').textContent = data.controls;
             
             const playBtn = document.getElementById('prevPlayBtn');
-            const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
+            const currentUid = currentUser ? currentUser.uid : 'guest';
             
-            // Garantisce che il gioco conosca l'utente dell'Hub prima di essere aperto
             localStorage.setItem('masterhub_logged_user', currentUid);
 
             let finalUrl = data.url;
@@ -1469,39 +1550,48 @@
             openModal('previewModal');
         }
 
-        function registerPlay(event, gameId) {
-            event.stopPropagation();
-            userState.gamesPlayed = (userState.gamesPlayed || 0) + 1;
-            userState.achievements.firstPlay = true;
-            
-            if (gameId === 'master-blackjack') {
-                userState.achievements.labTester = true;
-            }
-            
-            saveState();
-        }
 
-        window.triggerGameWin = function(gameKey, bonusPoints) {
-            let gameNameMap = {
-                'color-clash': 'Color Storm',
-                'last-spark': 'Spark Bombs',
-                'master-wordle': 'Word Rush',
-                'master-murder': 'Cyber Crime',
-                'master-verbum': 'Word Duel',
-                'master-sudoku': 'Digit Logic',
-                'master-key': 'Key Speed',
-                'master-block': 'Tetra Block',
-                'master-tris': 'Tris Battle',
-                'master-password': 'Code Breaker',
-                'master-chess': 'Royal Chess',
-                'master-blackjack': 'Cyber Deck'
-            };
+function registerPlay(event, gameId) {
+    event.stopPropagation();
+    userState.gamesPlayed = (userState.gamesPlayed || 0) + 1;
+    userState.achievements.firstPlay = true;
+    if (gameId === 'master-blackjack') userState.achievements.labTester = true;
+    saveState();
 
-            let mappedName = gameNameMap[gameKey] || gameKey;
-            let points = bonusPoints || ((gameKey === 'master-blackjack') ? 100 : 50);
+    // Reindirizza al link del gioco con i parametri utente se cliccato direttamente
+    const cardData = gameDataMap[gameId];
+    if (cardData && cardData.url && cardData.url !== '#') {
+        const launchUrl = getGameLaunchUrl(cardData.url);
+        window.open(launchUrl, '_blank');
+    }
+}
 
-            registerWin(mappedName, points);
-        };
+// Ascoltatore universale Ponteggio per i punti/vittorie dai giochi
+window.addEventListener('message', (event) => {
+    const { gameKey, points, gameId, score } = event.data || {};
+    const finalPoints = points || score || 50;
+    const targetKey = gameKey || gameId;
+
+    if (!targetKey) return;
+
+    let gameNameMap = {
+        'color-clash': 'Color Storm',
+        'last-spark': 'Spark Bombs',
+        'master-wordle': 'Word Rush',
+        'master-murder': 'Cyber Crime',
+        'master-verbum': 'Word Duel',
+        'master-sudoku': 'Digit Logic',
+        'master-key': 'Key Speed',
+        'master-block': 'Tetra Block',
+        'master-tris': 'Tris Battle',
+        'master-password': 'Code Breaker',
+        'master-chess': 'Royal Chess',
+        'master-blackjack': 'Cyber Deck'
+    };
+
+    let mappedName = gameNameMap[targetKey] || targetKey;
+    registerWin(mappedName, finalPoints);
+});
 
         function rateGame(event, gameId) {
             event.stopPropagation();
@@ -1574,32 +1664,7 @@
             }, 350);
         }
 
-        function syncLocalGameScores() {
-            const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
-            const prefix = (currentUid && currentUid !== 'guest') ? `${currentUid}_` : 'guest_';
-
-            const blockPoints = parseInt(localStorage.getItem(`${prefix}points_masterblock`)) || parseInt(localStorage.getItem(`${prefix}masterblock_hub_points`)) || 0;
-            const blockWins = parseInt(localStorage.getItem(`${prefix}wins_masterblock`)) || 0;
-
-            if (!userState.winsPerGame) userState.winsPerGame = {};
-
-            if (blockWins > (userState.winsPerGame['Tetra Block'] || 0)) {
-                userState.winsPerGame['Tetra Block'] = blockWins;
-            }
-
-            if (blockPoints > 0 && (!userState.syncedBlockXP || userState.syncedBlockXP < blockPoints)) {
-                let diff = blockPoints - (userState.syncedBlockXP || 0);
-                userState.xp = (userState.xp || 0) + diff;
-                userState.syncedBlockXP = blockPoints;
-                saveState();
-            } else {
-                updateUI();
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            syncLocalGameScores();
-            
             if (isFirebaseActive && auth) {
                 auth.onAuthStateChanged((user) => {
                     if (user) {
@@ -1612,33 +1677,6 @@
                 });
             } else {
                 checkLocalSession();
-            }
-        });
-
-        window.addEventListener('focus', () => {
-            syncLocalGameScores();
-        });
-
-        window.addEventListener('storage', (event) => {
-            if (event.key && (event.key.startsWith('points_') || event.key.startsWith('wins_') || event.key.includes('_points_') || event.key.includes('_wins_'))) {
-                syncLocalGameScores();
-            }
-        });
-
-        window.addEventListener('message', (event) => {
-            const { gameKey, points, userId } = event.data || {};
-
-            if (!gameKey) return;
-
-            const currentUid = currentUser ? currentUser.uid : (localStorage.getItem('currentSession') || 'guest');
-
-            // Accetta i punti ricevuti solo se appartengono all'utente loggato attuale o all'ospite corrente
-            if (userId === currentUid) {
-                registerWin(gameKey, points);
-            } else if (!currentUser && userId === 'guest') {
-                registerWin(gameKey, points);
-            } else {
-                console.warn(`Punteggio ignorato: ID utente del gioco (${userId}) non corrisponde all'utente dell'Hub (${currentUid}).`);
             }
         });
     </script>
